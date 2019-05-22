@@ -1,10 +1,13 @@
-import { createStore } from "redux";
+import axios from 'axios';
+import { createStore, applyMiddleware } from "redux";
+import thunk from 'redux-thunk';
+import { composeWithDevTools } from 'redux-devtools-extension'
 
 // начальное состояние
 const exampleInitialState = {
     todos: ["1", "2", "3"],
     text: "text in store",
-    data: ""
+    data: "init data"
 };
 
 // алиасы для экшенов
@@ -21,9 +24,9 @@ export const reducer = (state = exampleInitialState, action) => {
             return Object.assign({}, state, {
                 text: action.payload.text
             });
-        case actionTypes.GET:
+        case actionTypes.GETHOMEDATA:
             return Object.assign({}, state, {
-                data: action.payload.data
+                data: action.data.title
             });
         default:
             return state;
@@ -53,12 +56,26 @@ export const getData = (data = "DATA from serve") => {
     };
 };
 
-export const getHomeData = () => {
-    // fetch('https://jsonplaceholder.typicode.com/todos/1')
-    //     .then(response => response.json())
-    //     .then(json => console.log(json))
+export const getHomeData = async () => {
+    const response = await axios.get('https://jsonplaceholder.typicode.com/todos/1');
+
+    console.log(response.data.title);
+    
+    
+    return {
+        type: actionTypes.GETHOMEDATA,
+        payload: {
+            data: response.data.title
+        }
+    }
+}
+
+export const someAsyncAction = () => {
+   return dispatch => axios.get('https://jsonplaceholder.typicode.com/todos/1')
+        .then(({ data }) => data)
+        .then(data => dispatch({ type: 'GETHOMEDATA', data }));
 }
 
 export default function(initialState = exampleInitialState) {
-    return createStore(reducer, initialState);
+    return createStore(reducer, initialState, composeWithDevTools(applyMiddleware(thunk)));
 }

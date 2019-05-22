@@ -1,16 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Head from "../../components/Head/Head";
+import Head from "../components/Head/Head";
 import Link from "next/link";
-import "./Home.scss";
+//import "./Home.scss";
 
-import { changeText, getHomeData } from "../../../store";
+import { changeText, getHomeData, someAsyncAction} from "../../store";
 
 class Home extends Component {
-    // static async getInitialProps({ store, isServer, pathname, query }) {
-    //     store.dispatch(getHomeData());
-    // }
+
+    static async getInitialProps({ store, isServer, pathname, query }) {
+        await store.dispatch(someAsyncAction());
+    }
+    
     render() {
+        const {data} = this.props;
+
         return (
             <div>
                 <div className="Home">
@@ -31,7 +35,7 @@ class Home extends Component {
                         <a>Home</a>
                     </Link>
                     {/* <img src="/upload/cart.png" /> */}
-                    <div>Тудус {this.props.todos[0]}</div>
+                    <div>Тудус {data}</div>
                 </div>
             </div>
         );
@@ -47,7 +51,6 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = state => {
     return {
-        todos: state.todos,
         text: state.text,
         data: state.data
     };
@@ -57,6 +60,3 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(Home);
-
-// export default Home;
-//export default connect(state => state)(Home);

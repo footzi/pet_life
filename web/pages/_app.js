@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import App, { Container } from "next/app";
 import withRedux from "next-redux-wrapper";
 
-const Home = dynamic(() => import("./home"));
+//const Home = dynamic(() => import("."));
 
 class Index extends App {
     static async getInitialProps({ Component, ctx }) {
@@ -40,7 +40,7 @@ class Index extends App {
         return (
             <Container>
                 <Provider store={store}>
-                    <Home {...pageProps} />
+                    <Component {...pageProps} />
                 </Provider>
             </Container>
         );
