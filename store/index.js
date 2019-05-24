@@ -59,9 +59,6 @@ export const getData = (data = "DATA from serve") => {
 export const getHomeData = async () => {
     const response = await axios.get('https://jsonplaceholder.typicode.com/todos/1');
 
-    console.log(response.data.title);
-    
-    
     return {
         type: actionTypes.GETHOMEDATA,
         payload: {
@@ -71,6 +68,7 @@ export const getHomeData = async () => {
 }
 
 export const someAsyncAction = () => {
+    
    return dispatch => axios.get('https://jsonplaceholder.typicode.com/todos/1')
         .then(({ data }) => data)
         .then(data => dispatch({ type: 'GETHOMEDATA', data }));

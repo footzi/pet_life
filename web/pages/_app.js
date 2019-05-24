@@ -1,38 +1,15 @@
 import React from "react";
-import makeStore from "../../store";
-import dynamic from "next/dynamic";
+import makeStore from "store";
 import { Provider } from "react-redux";
 import App, { Container } from "next/app";
 import withRedux from "next-redux-wrapper";
-
-//const Home = dynamic(() => import("."));
+import Navigation from '../components/Navigation/Navigation'
 
 class Index extends App {
     static async getInitialProps({ Component, ctx }) {
-        // we can dispatch from here too
-        //ctx.store.dispatch({ type: "HOME", payload: "foo" });
-
-        const pageProps = Component.getInitialProps
-            ? await Component.getInitialProps(ctx)
-            : {};
-
+        const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
         return { pageProps };
     }
-
-    // static async getInitialProps({ Component, ctx }) {
-    //     return {
-    //         pageProps: {
-    //             // Call page-level getInitialProps
-    //             ...(Component.getInitialProps
-    //                 ? await Component.getInitialProps(ctx)
-    //                 : {})
-    //         }
-    //     };
-    // }
-
-    // static getInitialProps({ pathname, query }) {
-    //     return { custom: "custom" }; // это станет начальным набором props у страницы
-    // }
 
     render() {
         const { Component, pageProps, store } = this.props;
@@ -40,6 +17,7 @@ class Index extends App {
         return (
             <Container>
                 <Provider store={store}>
+                    <Navigation />
                     <Component {...pageProps} />
                 </Provider>
             </Container>
@@ -47,5 +25,4 @@ class Index extends App {
     }
 }
 
-//export default Index;
 export default withRedux(makeStore)(Index);

@@ -1,25 +1,14 @@
 import React, { Component } from "react";
-import Head from "../../components/Head/Head";
-import Link from "next/link";
-import "./About.scss";
+import Head from "components/Head.js";
+import "./about.scss";
 
 class About extends Component {
     render() {
+        console.log('1')
         return (
-            <div className="About">
-                <Head title="About" />
+            <div className="about">
+                <Head title="blog" />
                 <h1>Hello, about page!</h1>
-                <Link href="/about">
-                    <a>About</a>
-                </Link>
-                <br />
-                <Link href="/blog">
-                    <a>Blog</a>
-                </Link>
-                <br />
-                <Link href="/">
-                    <a>Home</a>
-                </Link>
             </div>
         );
     }
