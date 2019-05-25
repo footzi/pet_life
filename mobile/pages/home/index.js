@@ -3,6 +3,7 @@ import {loadHomeData} from '../../../store';
 import {Button, Text, View} from 'react-native';
 import React, {Component} from 'react';
 
+
 class Home extends Component {
     componentDidMount() {
         this.props.getData();

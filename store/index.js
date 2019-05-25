@@ -6,8 +6,8 @@ import {applyMiddleware, createStore} from 'redux';
 // начальное состояние
 const initState = {
     pages: {
-        home : [{id:1, name:"Vlad"}],
-        about: '',
+        home : [{id:1, name:"Home"}],
+        about: [{id:2, title:"Title"}],
         blog : ''
     }
 };
