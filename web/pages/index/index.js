@@ -1,4 +1,5 @@
 import './index.scss';
+import axios from 'axios';
 import Head from 'components/Head';
 import {Link} from 'web/routes';
 import React from 'react';
@@ -15,6 +16,13 @@ const User = ({data}) => {
     );
 };
 
+const send = () => {
+    axios.post('/api', '123')
+        .then((response) => {
+            console.log(response.data)
+        });
+};
+
 const Index = (props) => (
     <div className="home">
         <Head title="Главная"/>
@@ -23,6 +31,7 @@ const Index = (props) => (
         <ul className="Users">
             {props.users.map((item) => <User data={item} key={item.id}/>)}
         </ul>
+        <button onClick={send}>SEND</button>
     </div>
 );
 

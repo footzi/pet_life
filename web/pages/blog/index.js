@@ -16,7 +16,7 @@ const Post = ({data}) => {
 const Blog = (props) => (
     <div className="blog">
         <Head title="Блог"/>
-        <h1>Hello, blog page!</h1>
+        <h1>Hello, blog pagggeeee!</h1>
         <h2>Посты:</h2>
         <ul className="Users">
             {props.posts.map((item) => <Post data={item} key={item.id}/>)}

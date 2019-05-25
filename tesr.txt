@@ -1,0 +1,40 @@
+// const http = require('http');
+// const {createServer} = require('http');
+// const next = require('next');
+// const routes = require('../web/routes');
+// const httpProxy = require('http-proxy');
+
+// const port = parseInt(process.env.PORT, 10) || 3000;
+// const dev = process.env.NODE_ENV !== 'production';
+// const app = next({dev, dir: './web'});
+// const handler = routes.getRequestHandler(app);
+
+// app.prepare().then(() => {
+//   createServer(handler).listen(port, err => {
+//     if (err) throw err
+//     console.log(`> Ready on http://localhost:${port}`)
+//   })
+// })
+
+// const options = {
+//     router: {'localhost:8080/api': 'localhost:3000/api'}
+// };
+
+// httpProxy.createProxyServer({target:'http://localhost:8080'}).listen(8000)
+
+//const proxy = httpProxy.createProxyServer();
+
+// proxy.web(req, res);
+// app.prepare().then(() => {
+//     http.createServer((req, res) => {
+// 		proxy.web(req, res, {
+//             target: 'http://localhost:8080'
+// 		});
+		
+// 		handler(req, res);
+        
+//     }).listen(3000, (err) => {
+// 		if (err) throw err;
+// 		console.log('start')
+// 	});
+// });
