@@ -1,5 +1,6 @@
-import Link from "next/link";
 import './Navigation.scss';
+import Link from 'next/link';
+import React from 'react';
 
 const Navigation = () => {
     return (

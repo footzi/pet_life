@@ -1,17 +1,14 @@
-import React, { Component } from "react";
-import Head from "components/Head.js";
-import "./about.scss";
+import './about.scss';
+import Head from 'components/Head.js';
+import React from 'react';
 
-class About extends Component {
-    render() {
-        console.log('1')
-        return (
-            <div className="about">
-                <Head title="blog" />
-                <h1>Hello, about page!</h1>
-            </div>
-        );
-    }
+const About = () => {
+    return (
+        <div className='about'>
+            <Head title='blog' />
+            <h1>Hello, about page!</h1>
+        </div>
+    );
 }
 
 export default About;

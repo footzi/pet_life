@@ -1,9 +1,9 @@
-import React from "react";
-import makeStore from "store";
-import { Provider } from "react-redux";
-import App, { Container } from "next/app";
-import withRedux from "next-redux-wrapper";
-import Navigation from '../components/Navigation/Navigation'
+import App, { Container } from 'next/app';
+import makeStore from 'store';
+import { Provider } from 'react-redux';
+import Navigation from 'components/Navigation/Navigation'
+import React from 'react';
+import withRedux from 'next-redux-wrapper';
 
 class Index extends App {
     static async getInitialProps({ Component, ctx }) {
