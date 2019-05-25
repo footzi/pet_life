@@ -1,54 +1,41 @@
-import React, { Component } from "react";
-import { Button } from "react-native";
-import { StyleSheet, Text, View } from "react-native";
-import { connect } from "react-redux";
-import { changeText, someAsyncAction } from "../../../store";
+
+import {connect} from 'react-redux';
+import {loadHomeData} from '../../../store';
+import React, {Component} from 'react';
+import {Text, View} from 'react-native';
 
 class Home extends Component {
     componentDidMount() {
-       this.props.getData();
+        this.props.dispatch(loadHomeData());
     }
 
     render() {
+        const {users} = this.props;
+
         return (
             <View>
-                <Text style={styles.container}>
-                    Home page, async: {this.props.data}
-                </Text>
-
-                <Text style={styles.container}>
-                    Home page, data: {this.props.text}
-                </Text>
-                
+                <Text>1234</Text>
+                <View>
+                    {users.map((item) => <Text key={item.id}>{item.name}</Text>)}
+                </View>
             </View>
-           
+
         );
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        color: "red",
-        fontSize: 20
-    }
-});
+const mapStateToProps = (state) => {
+    const data = state.pages.home;
 
-const mapStateToProps = state => {
     return {
-        text: state.text,
-        data: state.data
+        users: data
     };
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        getData: () => dispatch(someAsyncAction()),
-        tick: () => dispatch(changeText())
-    };
-};
+// const mapDispatchToProps = (dispatch) => {
+//     return {
+//         getData: () => dispatch(loadHomeData())
+//     };
+// };
 
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Home);
+export default connect(mapStateToProps)(Home);

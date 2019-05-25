@@ -1,5 +1,5 @@
 import './Navigation.scss';
-import Link from 'next/link';
+import {Link} from 'web/routes';
 import React from 'react';
 
 const Navigation = () => {
@@ -9,13 +9,13 @@ const Navigation = () => {
                 <a>Главная</a>
             </Link>
             <Link href="/about">
-                <a>Обо проекте</a>
+                <a>О проекте (список дел)</a>
             </Link>
             <Link href="/blog">
                 <a>Блог</a>
             </Link>
         </nav>
-    )
-}
+    );
+};
 
 export default Navigation;

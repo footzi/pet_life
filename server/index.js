@@ -1,34 +1,35 @@
-const express = require("express");
-const next = require("next");
-const path = require("path");
-const port = parseInt(process.env.PORT, 10) || 3000;
-const dev = process.env.NODE_ENV !== "production";
-const app = next({ dev, dir: "./web" });
-const handle = app.getRequestHandler();
+// const express = require('express');
+// const next = require('next');
+// const path = require('path');
+// const routes = require('../web/routes');
+// const port = parseInt(process.env.PORT, 10) || 3000;
+// const dev = process.env.NODE_ENV !== 'production';
+// const app = next({dev, dir: './web'});
+// const handler = routes.getRequestHandler(app)
+
+// const server = express();
+
+// app.prepare().then(() => {
+//     express().use(handler);
+
+//     server.listen(port, (err) => {
+//         if (err) {throw err;}
+//         console.error(`> Ready on http://localhost:${port}`);
+//     });
+// });
+
+const { createServer } = require('http')
+const next = require('next')
+const routes = require('../web/routes')
+
+const port = parseInt(process.env.PORT, 10) || 3000
+const dev = process.env.NODE_ENV !== 'production'
+const app = next({dev, dir: './web'})
+const handler = routes.getRequestHandler(app)
 
 app.prepare().then(() => {
-    const server = express();
-
-    server.use(express.static(path.join(__dirname, "../")));
-
-    server.get("/about", (req, res) => {
-        return app.render(req, res, "/about", req.query);
-    });
-
-    server.get("/b", (req, res) => {
-        return app.render(req, res, "/b", req.query);
-    });
-
-    server.get("/posts/:id", (req, res) => {
-        return app.render(req, res, "/posts", { id: req.params.id });
-    });
-
-    server.get("*", (req, res) => {
-        return handle(req, res);
-    });
-
-    server.listen(port, err => {
-        if (err) throw err;
-        console.log(`> Ready on http://localhost:${port}`);
-    });
-});
+  createServer(handler).listen(port, err => {
+    if (err) throw err
+    console.log(`> Ready on http://localhost:${port}`)
+  })
+})

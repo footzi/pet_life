@@ -1,79 +1,90 @@
 import axios from 'axios';
-import { createStore, applyMiddleware } from "redux";
+import {composeWithDevTools} from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension'
+import {applyMiddleware, createStore} from 'redux';
 
 // начальное состояние
-const exampleInitialState = {
-    todos: ["1", "2", "3"],
-    text: "text in store",
-    data: "init data"
+const initState = {
+    pages: {
+        home : [{id:1, name:"Vlad"}],
+        about: '',
+        blog : ''
+    }
 };
 
 // алиасы для экшенов
 export const actionTypes = {
-    TICK: "TICK",
-    GET: "GET",
-    GETHOMEDATA: "GETHOMEDATA"
+    GET_HOME_DATA : 'GET_HOME_DATA',
+    GET_ABOUT_DATA: 'GET_ABOUT_DATA',
+    GET_BLOG_DATA : 'GET_BLOG_DATA'
 };
 
 // редьюсеры
-export const reducer = (state = exampleInitialState, action) => {
+export const reducer = (state = initState, action) => {
     switch (action.type) {
-        case actionTypes.TICK:
-            return Object.assign({}, state, {
-                text: action.payload.text
-            });
-        case actionTypes.GETHOMEDATA:
-            return Object.assign({}, state, {
-                data: action.data.title
-            });
+        case actionTypes.GET_HOME_DATA:
+            return {
+                ...state,
+                pages: {
+                    ...state.pages, home: action.data
+                }
+            };
+        case actionTypes.GET_ABOUT_DATA:
+            return {
+                ...state,
+                pages: {
+                    ...state.pages, about: action.data
+                }
+            };
+        case actionTypes.GET_BLOG_DATA:
+            return {
+                ...state,
+                pages: {
+                    ...state.pages, blog: action.data
+                }
+            };
         default:
             return state;
     }
 };
 
 // Экшены, возврашают тип, и какой-либо пэйлоад
-export const test = () => {
-    return { type: actionTypes.TEST };
+export const loadHomeData = () => {
+    return (dispatch) => axios.get('https://jsonplaceholder.typicode.com/users')
+        .then((response) => {
+            const data = response.data;
+
+            dispatch({type: 'GET_HOME_DATA', data});
+        })
+        .catch((error) => {
+            console.error(`При получении данных для главной страницы произошла ошибка: ${error}`);
+        });
 };
 
-export const changeText = (text = "Текст из экшена") => {
-    return {
-        type: actionTypes.TICK,
-        payload: {
-            text
-        }
-    };
+export const loadAboutData = () => {
+    return (dispatch) => axios.get('https://jsonplaceholder.typicode.com/todos')
+        .then((response) => {
+            const data = response.data;
+
+            dispatch({type: 'GET_ABOUT_DATA', data});
+        })
+        .catch((error) => {
+            console.error(`При получении данных для cтраницы обо мне произошла ошибка: ${error}`);
+        });
 };
 
-export const getData = (data = "DATA from serve") => {
-    return {
-        type: actionTypes.GET,
-        payload: {
-            data
-        }
-    };
+export const loadBlogData = () => {
+    return (dispatch) => axios.get('https://jsonplaceholder.typicode.com/posts')
+        .then((response) => {
+            const data = response.data;
+
+            dispatch({type: 'GET_BLOG_DATA', data});
+        })
+        .catch((error) => {
+            console.error(`При получении данных для блога произошла ошибка: ${error}`);
+        });
 };
 
-export const getHomeData = async () => {
-    const response = await axios.get('https://jsonplaceholder.typicode.com/todos/1');
-
-    return {
-        type: actionTypes.GETHOMEDATA,
-        payload: {
-            data: response.data.title
-        }
-    }
-}
-
-export const someAsyncAction = () => {
-    
-   return dispatch => axios.get('https://jsonplaceholder.typicode.com/todos/1')
-        .then(({ data }) => data)
-        .then(data => dispatch({ type: 'GETHOMEDATA', data }));
-}
-
-export default function(initialState = exampleInitialState) {
+export default (initialState = initState) => {
     return createStore(reducer, initialState, composeWithDevTools(applyMiddleware(thunk)));
-}
+};

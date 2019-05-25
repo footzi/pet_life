@@ -1,18 +1,19 @@
-import App, { Container } from 'next/app';
+import App, {Container} from 'next/app';
 import makeStore from 'store';
-import { Provider } from 'react-redux';
-import Navigation from 'components/Navigation/Navigation'
+import Navigation from 'components/Navigation/Navigation';
+import {Provider} from 'react-redux';
 import React from 'react';
 import withRedux from 'next-redux-wrapper';
 
 class Index extends App {
-    static async getInitialProps({ Component, ctx }) {
+    static async getInitialProps({Component, ctx}) {
         const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
-        return { pageProps };
+
+        return {pageProps};
     }
 
     render() {
-        const { Component, pageProps, store } = this.props;
+        const {Component, pageProps, store} = this.props;
 
         return (
             <Container>

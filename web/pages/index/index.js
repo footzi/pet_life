@@ -1,50 +1,43 @@
-
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import './index.scss';
 import Head from 'components/Head';
+import {Link} from 'web/routes';
+import React from 'react';
+import {connect} from 'react-redux';
+import {loadHomeData} from 'store';
 
-import { changeText, getHomeData, someAsyncAction} from 'store';
+const User = ({data}) => {
+    return (
+        <li>
+            <Link route="user" params={{id: data.id}}>
+                <a>{data.name}</a>
+            </Link>
+        </li>
+    );
+};
 
-class Home extends Component {
+const Index = (props) => (
+    <div className="home">
+        <Head title="Главная"/>
+        <h1>Hello, home page!</h1>
+        <h2>Пользователи:</h2>
+        <ul className="Users">
+            {props.users.map((item) => <User data={item} key={item.id}/>)}
+        </ul>
+    </div>
+);
 
-    static async getInitialProps({ store, isServer, pathname, query }) {
-        await store.dispatch(someAsyncAction());
-    }
-    
-    render() {
-        const {data} = this.props;
+const mapStateToProps = (state) => {
+    const data = state.pages.home;
 
-        return (
-            <div>
-                <div className='home'>
-                    
-                    <Head title='Home' />
-                    <h1>Hello, home page!</h1>
-                    <h2>Prop from Redux {this.props.text}</h2>
-                    <h3>Prop from getInitialProps {this.props.data}</h3>
-                    <button onClick={this.props.tick}>Кнопка</button>
-                    {/* <img src='/upload/cart.png' /> */}
-                </div>
-            </div>
-        );
-    }
-}
-
-//tick: () => dispatch({ type: 'TICK' }) - передаем редьюсер напрямуб
-const mapDispatchToProps = dispatch => {
     return {
-        tick: () => dispatch(changeText())
+        users: data
     };
 };
 
-const mapStateToProps = state => {
-    return {
-        text: state.text,
-        data: state.data
-    };
+Index.getInitialProps = async({store}) => {
+    await store.dispatch(loadHomeData());
 };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Home);
+
+export default connect(mapStateToProps)(Index);
+
