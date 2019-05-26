@@ -1,4 +1,3 @@
-import './index.scss';
 import axios from 'axios';
 import Head from 'components/Head';
 import { Link } from 'web/routes';
