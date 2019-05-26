@@ -1,4 +1,4 @@
-const pathEntities = process.env.NODE_ENV === 'development' ? './server/entities/*.ts' : './server/build/entities/*.js';
+const pathEntities = process.env.NODE_ENV === 'development' ? './server/src/entities/*.ts' : './server/build/entities/*.js';
 
 module.exports = {
 	port: {

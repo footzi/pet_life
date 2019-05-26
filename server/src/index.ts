@@ -3,9 +3,8 @@ import express from 'express';
 import router from './routers';
 import initNext from './next';
 
-const config = require('../server.config');
+const config = require('../../server.config');
 
-// @ts-ignore
 const app = express();
 
 app.use('/api', router);

@@ -1,8 +1,8 @@
 const next = require('next');
 const express = require('express');
 const proxy = require('http-proxy-middleware');
-const routes = require('../web/routes');
-const config = require('../server.config');
+const routes = require('../../web/routes');
+const config = require('../../server.config');
 
 const app = next({ dev: process.env.NODE_ENV !== 'production', dir: './web' });
 const handler = routes.getRequestHandler(app);
