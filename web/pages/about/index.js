@@ -2,7 +2,7 @@ import Head from 'components/Head';
 import React from 'react';
 import { connect } from 'react-redux';
 import { loadAboutData } from 'store';
-import './blog.scss';
+import './about.scss';
 
 const Todo = ({ data }) => (
 	<li>
