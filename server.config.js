@@ -1,3 +1,4 @@
+const path = require('path');
 const pathEntities = process.env.NODE_ENV === 'development' ? './server/src/entities/*.ts' : './server/build/entities/*.js';
 
 module.exports = {
@@ -5,6 +6,7 @@ module.exports = {
 		next: process.env.PORT || 3000,
 		api: 8080,
 	},
+	static: path.join(__dirname + "/upload"),
 	database: {
 		type: 'mysql',
 		host: 'eu-cdbr-west-02.cleardb.net',

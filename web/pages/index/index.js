@@ -26,6 +26,7 @@ const Index = props => (
 	<div className="index">
 		<Head title="Главная"/>
 		<h1>Hello, home page!</h1>
+		<img src="/fraj.jpg"/>
 
 		<SignUp />
 
