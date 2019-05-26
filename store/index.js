@@ -79,4 +79,6 @@ export const loadBlogData = () => dispatch => axios.get('https://jsonplaceholder
 		console.error(`При получении данных для блога произошла ошибка: ${error}`);
 	});
 
-export default (initialState = initState) => createStore(reducer, initialState, composeWithDevTools(applyMiddleware(thunk)));
+export default (initialState = initState) => {
+	createStore(reducer, initialState, composeWithDevTools(applyMiddleware(thunk)));
+};

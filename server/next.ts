@@ -1,26 +1,27 @@
 const next = require('next');
-const app = next({dev: process.env.NODE_ENV !== 'production', dir: './web'});
 const express = require('express');
-const routes = require('../web/routes');
-const handler = routes.getRequestHandler(app);
 const proxy = require('http-proxy-middleware');
-const server = express();
+const routes = require('../web/routes');
 const config = require('../server.config');
 
-const initNext = () => {
-	app.prepare().then(() => {
+const app = next({ dev: process.env.NODE_ENV !== 'production', dir: './web' });
+const handler = routes.getRequestHandler(app);
+const server = express();
+
+const initNext = (): void => {
+	app.prepare().then((): void => {
 		server.use(proxy('/api', {
-			target: `http://localhost:${config.port.api}`, 
+			target: `http://localhost:${config.port.api}`,
 			changeOrigin: true
 		}));
 
 		server.use(handler);
-	
-		server.listen(config.port.next, (err: string) => {
+
+		server.listen(config.port.next, (err: string): void => {
 			if (err) {
 				throw err;
 			}
-	
+
 			console.log(`> Next listening on port ${config.port.next}`);
 		});
 	});

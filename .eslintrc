@@ -5,9 +5,11 @@
 		"es6": true,
 		"commonjs": true
 	},
+	"parser": "@typescript-eslint/parser",
 	"extends": [
 		"airbnb/base",
-		"plugin:react/recommended"
+		"plugin:react/recommended",
+		"plugin:@typescript-eslint/recommended"
 	],
 	"parserOptions": {
 		"ecmaVersion": 9,
@@ -16,21 +18,14 @@
 		},
 		"sourceType": "module"
 	},
-	"settings": {
-		"import/resolver": {
-			"alias": {
-				"map": [
-					["components", "./web/components"],
-					["web", "./web"],
-					["store", "./store"]
-				]
-			}
-		}
-	},
 	"plugins": ["react"],
 	"rules": {
+		"@typescript-eslint/indent": 0,
+		"@typescript-eslint/no-var-requires": 0,
 		"linebreak-style": 0,
-		"indent": ["error", "tab"],
-		"no-tabs": 0
+		"no-tabs": 0,
+		"import/no-unresolved": 0,
+		"comma-dangle": [0],
+		"no-console": [0]
 	}
 }
