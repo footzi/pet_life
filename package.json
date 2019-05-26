@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "postinstall": "tsc --build & npm run web-build",
-    "start": "next start ./web",
+    "start": "next start -p $PORT ./web",
     "web-dev": "cross-env NODE_ENV=development nodemon --watch",
     "web-next": "next ./web",
     "web-build": "next build ./web",
