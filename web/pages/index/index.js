@@ -5,6 +5,7 @@ import SignUp from 'components/SignUp/SignUp';
 import React from 'react';
 import { connect } from 'react-redux';
 import { loadHomeData } from 'store';
+import './index.scss';
 
 const User = ({ data }) => (
 	<li>
@@ -22,7 +23,7 @@ const send = () => {
 };
 
 const Index = props => (
-	<div className="home">
+	<div className="index">
 		<Head title="Главная"/>
 		<h1>Hello, home page!</h1>
 
