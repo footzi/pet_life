@@ -79,6 +79,12 @@ export const loadBlogData = () => dispatch => axios.get('https://jsonplaceholder
 		console.error(`При получении данных для блога произошла ошибка: ${error}`);
 	});
 
-export default (initialState = initState) => {
-	createStore(reducer, initialState, composeWithDevTools(applyMiddleware(thunk)));
+export const toSignUp = (form) => {
+	const formData = new FormData(form);
+
+	axios.post('/api/signup', formData)
+		.then((response) => console.log(response.data))
+		.catch((error) => console.error(error.response));
 };
+
+export default (initialState = initState) => createStore(reducer, initialState, composeWithDevTools(applyMiddleware(thunk)));

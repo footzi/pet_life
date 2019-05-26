@@ -2,6 +2,7 @@ import './index.scss';
 import axios from 'axios';
 import Head from 'components/Head';
 import { Link } from 'web/routes';
+import SignUp from 'components/SignUp/SignUp';
 import React from 'react';
 import { connect } from 'react-redux';
 import { loadHomeData } from 'store';
@@ -25,11 +26,16 @@ const Index = props => (
 	<div className="home">
 		<Head title="Главная"/>
 		<h1>Hello, home page!</h1>
-		<h2>Пользователи:</h2>
+
+		<SignUp />
+
+		{/* <h2>Пользователи:</h2>
 		<ul className="Users">
 			{props.users.map(item => <User data={item} key={item.id}/>)}
 		</ul>
-		<button onClick={send}>SEND</button>
+		<button onClick={send}>SEND</button> */}
+
+
 	</div>
 );
 

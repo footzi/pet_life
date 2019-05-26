@@ -1,3 +1,5 @@
+const pathEntities = process.env.NODE_ENV === 'development' ? './server/entities/*.ts' : './server/build/entities/*.js';
+
 module.exports = {
 	port: {
 		next: process.env.PORT || 3000,
@@ -11,5 +13,8 @@ module.exports = {
 		password: '7f831e20',
 		database: 'heroku_4d4d87bbe77a652',
 		synchronize: true,
+		entities: [
+			pathEntities
+		]
 	},
 };

@@ -8,7 +8,6 @@ import withRedux from 'next-redux-wrapper';
 class Index extends App {
 	static async getInitialProps({ Component, ctx }) {
 		const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
-
 		return { pageProps };
 	}
 
