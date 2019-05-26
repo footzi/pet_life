@@ -2,6 +2,7 @@ import Head from 'components/Head';
 import React from 'react';
 import { connect } from 'react-redux';
 import { loadBlogData } from 'store';
+import './blog.scss';
 
 const Post = ({ data }) => (
 	<li>
