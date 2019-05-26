@@ -4,7 +4,7 @@
   ],
 
   "plugins": [
-    ["module-resolver", {
+	["module-resolver", {
 		"root": ["../"],
 			"alias": {
 			"store": "./store",

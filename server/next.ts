@@ -5,7 +5,7 @@ const routes = require('../web/routes');
 const handler = routes.getRequestHandler(app);
 const proxy = require('http-proxy-middleware');
 const server = express();
-import config from './config';
+const config = require('../server.config');
 
 const initNext = () => {
 	app.prepare().then(() => {
@@ -16,7 +16,7 @@ const initNext = () => {
 
 		server.use(handler);
 	
-		server.listen(config.port.next, (err) => {
+		server.listen(config.port.next, (err: string) => {
 			if (err) {
 				throw err;
 			}
