@@ -3,7 +3,7 @@ const pathEntities = process.env.NODE_ENV === 'development' ? './server/src/enti
 module.exports = {
 	port: {
 		next: process.env.PORT || 3000,
-		api: process.env.PORT || 8080,
+		api: 8080,
 	},
 	database: {
 		type: 'mysql',
