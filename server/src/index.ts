@@ -17,7 +17,7 @@ createConnection(config.database)
         console.log(`> Database connection to ${config.database.host}`);
 
         app.listen(config.port.api, (): void => {
-            // initNext();
+            initNext();
             console.log(`> Api listening on port ${config.port.api}`);
         });
     })
