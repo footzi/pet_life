@@ -8,6 +8,9 @@ const config = require('../../server.config');
 const app = express();
 
 app.use('/api', router);
+app.get('/api/test', (req, res) => {
+    res.send('hello api test')
+});
 app.get('/test', (req, res) => {
     res.send('hello')
 });
