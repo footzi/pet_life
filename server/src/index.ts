@@ -8,13 +8,16 @@ const config = require('../../server.config');
 const app = express();
 
 app.use('/api', router);
+app.get('/test', (req, res) => {
+    res.send('hello')
+});
 
 createConnection(config.database)
     .then((): void => {
         console.log(`> Database connection to ${config.database.host}`);
 
         app.listen(config.port.api, (): void => {
-            initNext();
+            // initNext();
             console.log(`> Api listening on port ${config.port.api}`);
         });
     })

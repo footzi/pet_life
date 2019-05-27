@@ -3,10 +3,26 @@ import { Button, Text, View } from 'react-native';
 import React, { Component } from 'react';
 import { loadHomeData } from '../../../store';
 
-
 class Home extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {text: 'test'};
+	  }
+
 	componentDidMount() {
 		this.props.getData();
+	}
+
+	send() {
+		fetch('/test')
+			.then((res)=> {
+				console.log(res)
+				
+			})
+			.catch((err)=>{
+				console.log(err)
+				
+			})
 	}
 
 	render() {
@@ -22,6 +38,11 @@ class Home extends Component {
 					title="Go to About"
 					onPress={() => this.props.navigation.navigate('About')}
 				/>
+				<Button
+					title="Test send"
+					onPress={() => this.send()}
+				/>
+				<Text>{this.state.text}</Text>
 			</View>
 		);
 	}
