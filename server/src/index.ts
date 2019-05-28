@@ -13,7 +13,7 @@ app.use((req, res, next): void => {
     next();
 });
 
-console.log(process.env.PORT);
+app.use(express.static(config.static));
 
 app.use('/api', router);
 app.get('/api/test', (req, res) => {

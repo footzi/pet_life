@@ -3,9 +3,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { applyMiddleware, createStore } from 'redux';
 
-const config = require('../server.config');
-
-console.log(config.domain);
+const { domain } = require('../server.config');
 
 // начальное состояние
 const initState = {
@@ -86,7 +84,7 @@ export const loadBlogData = () => dispatch => axios.get('https://jsonplaceholder
 export const toSignUp = (form) => {
 	const formData = new FormData(form);
 
-	axios.post(`${config.domain}/api/signup`, formData)
+	axios.post(`${domain}/api/signup`, formData)
 		.then((response) => console.log(response.data))
 		.catch((error) => console.error(error.response));
 };

@@ -9,7 +9,7 @@ module.exports = {
 		api: 'localhost'
 	},
 	domain: 'https://native-pet-life.herokuapp.com',
-	static: path.join(`${__dirname}/upload`),
+	static: path.join(`${__dirname}/..`),
 	database: {
 		type: 'mysql',
 		host: 'eu-cdbr-west-02.cleardb.net',

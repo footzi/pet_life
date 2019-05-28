@@ -9,8 +9,8 @@ module.exports = {
 	host: {
 		api: ip.address()
 	},
-	domain: `http://${ip.address()}`,
-	static: path.join(`${__dirname}/upload`),
+	domain: `http://${ip.address()}:8080`,
+	static: path.join(`${__dirname}/..`),
 	database: {
 		type: 'mysql',
 		host: 'eu-cdbr-west-02.cleardb.net',

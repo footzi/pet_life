@@ -13,9 +13,6 @@ const write = (env, type) => {
         console.log(`Config setup as ${type}`);
     });
 };
-console.log(isDev, 'isdev');
-console.log(isProd, 'prod');
-console.log(process.env.PORT);
 
 if (isDev) {
     write(dev, 'development');
