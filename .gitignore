@@ -3,6 +3,7 @@
 .DS_Store
 
 web/.next
+server.config.json
 # Xcode
 #
 build/
