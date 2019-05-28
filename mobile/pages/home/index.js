@@ -3,6 +3,10 @@ import { Button, Text, View } from 'react-native';
 import React, { Component } from 'react';
 import { loadHomeData } from '../../../store';
 
+const config = require('../../../server.config');
+
+console.log(config.domain);
+
 class Home extends Component {
 	constructor(props) {
 		super(props);

@@ -1,8 +1,10 @@
 const path = require('path');
 const ip = require('ip');
 
-const localDomain = true; // Заменить на true если надо переключится на локальный домен
+const localDomain = false; // Заменить на true если надо переключится на локальный домен
 const isDev = process.env.NODE_ENV === 'development';
+
+console.log(ip.address())
 
 module.exports = {
 	port: {
@@ -12,7 +14,7 @@ module.exports = {
 	host: {
 		api: isDev ? ip.address() : ''
 	},
-	domain: localDomain && isDev ? `http://${ip.address()}` : 'https://native-pet-life.herokuapp.com/',
+	domain: localDomain && isDev ? `http://${ip.address()}` : 'https://native-pet-life.herokuapp.com',
 	static: path.join(`${__dirname}/upload`),
 	database: {
 		type: 'mysql',
