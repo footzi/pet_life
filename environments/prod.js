@@ -2,11 +2,11 @@ const path = require('path');
 
 module.exports = {
 	port: {
-		next: process.env.PORT,
+		next: process.env.PORT || 3000,
 		api: 8080,
 	},
 	host: {
-		api: ''
+		api: 'localhost'
 	},
 	domain: 'https://native-pet-life.herokuapp.com',
 	static: path.join(`${__dirname}/upload`),

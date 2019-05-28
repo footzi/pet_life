@@ -3,13 +3,15 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "postinstall": "tsc --build & npm run web-build",
+    "postinstall": "npm run env-prod && tsc --build & npm run web-build",
     "start": "node ./server/build/index.js",
     "web-dev": "cross-env NODE_ENV=development nodemon --watch",
     "web-next": "next ./web",
     "web-build": "next build ./web",
     "mobile-start": "node node_modules/react-native/local-cli/cli.js start",
     "run-android": "react-native run-android",
+    "env-dev": "node environments --dev",
+    "env-prod": "node environments --prod",
     "lint": "eslint -c .eslintrc --ext .js,.ts ./",
     "lint-fix": "eslint -c .eslintrc --ext .js,.ts ./ --fix",
     "test": "jest"

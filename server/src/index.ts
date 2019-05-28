@@ -3,7 +3,7 @@ import express from 'express';
 import router from './routers';
 import initNext from './next';
 
-const config = require('../../server.config');
+const config = require('../../server.config.json');
 
 const app = express();
 
