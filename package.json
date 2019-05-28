@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "postinstall": "tsc --build & npm run web-build",
-    "start": "npm run env-prod & node ./server/build/index.js",
+    "postinstall": "tsc --build",
+    "start": "npm run env-prod & npm run web-build & node ./server/build/index.js",
     "web-dev": "cross-env NODE_ENV=development nodemon --watch",
     "web-next": "next ./web",
     "web-build": "next build ./web",

@@ -1,34 +1,9 @@
 import { connect } from 'react-redux';
-import { Button, Text, View } from 'react-native';
+import { Button, Text, View, Image } from 'react-native';
 import React, { Component } from 'react';
 import { loadHomeData } from '../../../store';
 
-const config = require('../../../server.config');
-
-console.log(config.domain);
-
 class Home extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {text: 'test'};
-	  }
-
-	componentDidMount() {
-		this.props.getData();
-	}
-
-	send() {
-		fetch('/test')
-			.then((res)=> {
-				console.log(res)
-				
-			})
-			.catch((err)=>{
-				console.log(err)
-				
-			})
-	}
-
 	render() {
 		const { users } = this.props;
 
@@ -42,11 +17,10 @@ class Home extends Component {
 					title="Go to About"
 					onPress={() => this.props.navigation.navigate('About')}
 				/>
-				<Button
-					title="Test send"
-					onPress={() => this.send()}
+				<Image
+					style={{ width: 50, height: 50 }}
+					source={{ uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png' }}
 				/>
-				<Text>{this.state.text}</Text>
 			</View>
 		);
 	}
