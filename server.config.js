@@ -1,13 +1,19 @@
 const path = require('path');
+const ip = require('ip');
 
-const pathEntities = process.env.NODE_ENV === 'development' ? './server/src/entities/*.ts' : './server/build/entities/*.js';
+const localDomain = true; // Заменить на true если надо переключится на локальный домен
+const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
 	port: {
 		next: process.env.PORT || 3000,
 		api: 8080,
 	},
-	static: path.join(__dirname + '/upload'),
+	host: {
+		api: isDev ? ip.address() : ''
+	},
+	domain: localDomain && isDev ? `http://${ip.address()}` : 'https://native-pet-life.herokuapp.com/',
+	static: path.join(`${__dirname}/upload`),
 	database: {
 		type: 'mysql',
 		host: 'eu-cdbr-west-02.cleardb.net',
@@ -17,7 +23,7 @@ module.exports = {
 		database: 'heroku_4d4d87bbe77a652',
 		synchronize: true,
 		entities: [
-			pathEntities
+			isDev ? './server/src/entities/*.ts' : './server/build/entities/*.js'
 		]
 	},
 };

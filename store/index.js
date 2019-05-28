@@ -82,7 +82,7 @@ export const loadBlogData = () => dispatch => axios.get('https://jsonplaceholder
 export const toSignUp = (form) => {
 	const formData = new FormData(form);
 
-	axios.post('/api/signup', formData)
+	axios.get('http://192.168.0.106:8000/test', formData)
 		.then((response) => console.log(response.data))
 		.catch((error) => console.error(error.response));
 };

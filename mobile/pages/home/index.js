@@ -14,7 +14,7 @@ class Home extends Component {
 	}
 
 	send() {
-		fetch('http://localhost:8080/test')
+		fetch('/test')
 			.then((res)=> {
 				console.log(res)
 				
