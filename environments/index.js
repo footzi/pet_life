@@ -15,7 +15,7 @@ const write = (env, type) => {
 };
 console.log(isDev, 'isdev');
 console.log(isProd, 'prod');
-console.log(prod.port.next);
+console.log(process.env.PORT);
 
 if (isDev) {
     write(dev, 'development');
