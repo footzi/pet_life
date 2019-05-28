@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
 	port: {
-		next: process.env.PORT,
+		next: process.env.PORT || 3000,
 		api: 8080,
 	},
 	host: {
