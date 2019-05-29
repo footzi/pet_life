@@ -10,7 +10,7 @@ const isProd = process.argv.some((val) => val === '--prod');
 const write = (env, type) => {
     fs.writeFile(config, JSON.stringify(env, null, 2), (err) => {
         if (err) throw err;
-        console.log(`Config setup as ${type}`);
+        console.log(`> Environments setup as ${type}`);
     });
 };
 

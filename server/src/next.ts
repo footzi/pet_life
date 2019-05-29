@@ -10,6 +10,7 @@ const server = express();
 
 const initNext = (): void => {
 	app.prepare().then((): void => {
+		server.use(proxy('/api', { target: `http://localhost:${config.port.api}` }));
 		server.use(handler);
 
 		server.listen(config.port.next, (err: string): void => {
