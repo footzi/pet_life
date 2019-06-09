@@ -6,7 +6,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { loadHomeData } from 'store';
 import './index.scss';
-const { domain } = require('../../../server.config');
+
+const DOMAIN = require('config').domain;
 
 const User = ({ data }) => (
 	<li>
@@ -27,7 +28,7 @@ const Index = props => (
 	<div className="index">
 		<Head title="Главная"/>
 		<h1>Hello, home page!</h1>
-		<img src={`${domain}/upload/fraj.jpg`}/>
+		<img src={`${DOMAIN}/upload/fraj.jpg`}/>
 
 		<SignUp />
 

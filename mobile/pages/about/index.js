@@ -1,9 +1,7 @@
 import { connect } from 'react-redux';
-import {
-	Button, ScrollView, Text, View,
-} from 'react-native';
+import { Button, ScrollView, Text, View } from 'react-native';
 import React, { Component } from 'react';
-import { loadAboutData } from '../../../store';
+import { loadAboutData } from 'store';
 
 class About extends Component {
 	componentDidMount() {

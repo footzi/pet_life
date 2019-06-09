@@ -1,14 +1,17 @@
 import { connect } from 'react-redux';
-import { Button, Text, View, Image } from 'react-native';
+import { Button, ScrollView, Text, View, Image } from 'react-native';
 import React, { Component } from 'react';
-import { loadHomeData } from '../../../store';
+import { loadHomeData } from 'store';
+import SignUp from 'components/SignUp/SignUp';
+
+const DOMAIN = require('config').domain;
 
 class Home extends Component {
 	render() {
 		const { users } = this.props;
 
 		return (
-			<View>
+			<ScrollView>
 				<Text>Home page</Text>
 				<View>
 					{users.map(item => <Text key={item.id}>{item.name}</Text>)}
@@ -19,9 +22,10 @@ class Home extends Component {
 				/>
 				<Image
 					style={{ width: 50, height: 50 }}
-					source={{ uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png' }}
+					source={{ uri: `${DOMAIN}/upload/fraj.jpg` }}
 				/>
-			</View>
+				<SignUp />
+			</ScrollView>
 		);
 	}
 }
