@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import { Button, Text, View, Image } from 'react-native';
 import React, { Component } from 'react';
-import { loadHomeData } from '../../../store';
+import { loadHomeData } from 'store';
+const { domain } = require('config');
 
 class Home extends Component {
 	render() {
@@ -19,7 +20,7 @@ class Home extends Component {
 				/>
 				<Image
 					style={{ width: 50, height: 50 }}
-					source={{ uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png' }}
+					source={{ uri: `${process.env.DOMAIN}/upload/fraj.jpg` }}
 				/>
 			</View>
 		);

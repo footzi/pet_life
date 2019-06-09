@@ -1,4 +1,11 @@
 {
   "name": "pet_life",
-  "displayName": "pet_life"
+  "displayName": "pet_life",
+  "appKey": "pet_life",
+  "expo": {
+    "name": "pet_life",
+    "slug": "pet_life",
+    "sdkVersion": "33.0.0",
+    "privacy": "public"
+  }
 }
