@@ -81,8 +81,12 @@ export const loadBlogData = () => dispatch => axios.get('https://jsonplaceholder
 		console.error(`При получении данных для блога произошла ошибка: ${error}`);
 	});
 
-export const toSignUp = (form) => {
-	const formData = new FormData(form);
+export const toSignUp = (data) => {
+	const formData = new FormData();
+
+	for (const prop of Object.keys(data)) {
+		formData.append(prop, data[prop]);
+	}
 
 	axios.post(`${domain}/api/signup`, formData)
 		.then((response) => console.log(response.data))
