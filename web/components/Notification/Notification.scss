@@ -1,0 +1,26 @@
+.notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid blue;
+  padding: 30px;
+  background-color: white;
+  display: none;
+
+  &.is-open {
+    display: block;
+  }
+}
+
+.notification__success {
+  color: green;
+}
+
+.notification__error {
+  color: red;
+}
+
+.notification__button {
+  margin-top: 10px;
+}

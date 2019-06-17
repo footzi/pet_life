@@ -19,5 +19,6 @@
     "entities": [
       "./server/src/entities/*.ts"
     ]
-  }
+  },
+  "secret": "Lipton321-jwt"
 }

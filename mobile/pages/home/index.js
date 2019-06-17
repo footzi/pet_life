@@ -7,39 +7,39 @@ import SignUp from 'components/SignUp/SignUp';
 const DOMAIN = require('config').domain;
 
 class Home extends Component {
-	render() {
-		const { users } = this.props;
+  render() {
+    const { users } = this.props;
 
-		return (
-			<ScrollView>
-				<Text>Home page</Text>
-				<View>
-					{users.map(item => <Text key={item.id}>{item.name}</Text>)}
-				</View>
-				<Button
-					title="Go to About"
-					onPress={() => this.props.navigation.navigate('About')}
-				/>
-				<Image
-					style={{ width: 50, height: 50 }}
-					source={{ uri: `${DOMAIN}/upload/fraj.jpg` }}
-				/>
-				<SignUp />
-			</ScrollView>
-		);
-	}
+    return (
+      <ScrollView>
+        <Text>Home page</Text>
+        <View>
+          {users.map(item => <Text key={item.id}>{item.name}</Text>)}
+        </View>
+        <Button
+          title="Go to About"
+          onPress={() => this.props.navigation.navigate('About')}
+        />
+        <Image
+          style={{ width: 50, height: 50 }}
+          source={{ uri: `${DOMAIN}/upload/fraj.jpg` }}
+        />
+        <SignUp />
+      </ScrollView>
+    );
+  }
 }
 
 const mapStateToProps = (state) => {
-	const data = state.pages.home;
+  const data = state.pages.home;
 
-	return {
-		users: data,
-	};
+  return {
+    users: data,
+  };
 };
 
 const mapDispatchToProps = dispatch => ({
-	getData: () => dispatch(loadHomeData()),
+  getData: () => dispatch(loadHomeData()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

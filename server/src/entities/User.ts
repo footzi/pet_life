@@ -2,12 +2,12 @@ import { Column, PrimaryGeneratedColumn, Entity } from 'typeorm';
 
 @Entity()
 export default class User {
-    constructor() {
-        this.id = 0;
-        this.name = '';
-        this.surname = '';
-        this.password = '';
-    }
+  constructor() {
+    this.id = 0;
+    this.name = '';
+    this.surname = '';
+    this.password = '';
+  }
 
     @PrimaryGeneratedColumn()
     id: number;
