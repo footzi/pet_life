@@ -4,6 +4,8 @@ import passportJwt from 'passport-jwt';
 import SignInModel from '../models/SignIn';
 import { IPayloadJWT } from '../interfaces';
 
+const SECRET = require('../../../server.config.json').secret;
+
 const { ExtractJwt } = passportJwt;
 const JwtStrategy = passportJwt.Strategy;
 
@@ -12,14 +14,17 @@ export default class AuthController {
   private static jwtStategy(): void {
     const options = {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'secret'
+      secretOrKey: SECRET
     };
 
     passport.use('jwt', new JwtStrategy(options,
       // eslint-disable-next-line
-            async (payload: IPayloadJWT, done: Function): Promise<void> => {
+      async (payload: IPayloadJWT, done: Function): Promise<void> => {
         try {
           const user = await SignInModel.signIn(payload.username);
+
+          
+          console.log(payload)
 
           if (!user) {
             const message = 'Данного пользователя не существует';
@@ -44,6 +49,8 @@ export default class AuthController {
         res.status(500).send({ err, message: 'Произошла ошибка на сервере' });
         return;
       }
+
+      // console.log(user)
 
       if (!user) {
         res.status(403).send(message);

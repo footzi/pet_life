@@ -2,8 +2,11 @@ import axios from 'axios';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { applyMiddleware, createStore } from 'redux';
+import { Cookies } from 'react-cookie';
 
 const { domain } = require('../server.config');
+
+const cookies = new Cookies();
 
 // начальное состояние
 const initState = {
@@ -65,22 +68,28 @@ export const setNotification = (data) => dispatch => {
 export const loadHomeData = () => dispatch => axios.get('https://jsonplaceholder.typicode.com/users')
   .then((response) => {
     const { data } = response;
-
     dispatch({ type: 'GET_HOME_DATA', data });
   })
   .catch((error) => {
     console.error(`При получении данных для главной страницы произошла ошибка: ${error}`);
   });
 
-export const loadAboutData = () => dispatch => axios.get('https://jsonplaceholder.typicode.com/todos')
-  .then((response) => {
-    const { data } = response;
+export const loadAboutData = () => dispatch => {
+  const token = cookies.get('token');
+  const auth = { Authorization: `Bearer ${token}` };
 
-    dispatch({ type: 'GET_ABOUT_DATA', data });
-  })
-  .catch((error) => {
-    console.error(`При получении данных для cтраницы обо мне произошла ошибка: ${error}`);
-  });
+  axios.get(`${domain}/api/about`, { headers: auth })
+    .then((response) => {
+      const { data } = response;
+      dispatch(setNotification({ success: 'Доступ разрешен' }));
+
+    // dispatch({ type: 'GET_HOME_DATA', data });
+    })
+    .catch((error) => {
+      dispatch(setNotification({ error: error.response.data }));
+      console.error(`При получении данных для cтраницы обо мне произошла ошибка: ${error}`);
+    });
+};
 
 export const loadBlogData = () => dispatch => axios.get('https://jsonplaceholder.typicode.com/posts')
   .then((response) => {
@@ -92,7 +101,7 @@ export const loadBlogData = () => dispatch => axios.get('https://jsonplaceholder
     console.error(`При получении данных для блога произошла ошибка: ${error}`);
   });
 
-export const toSignIn = (data) => dispatch => {
+export const toSignIn = data => dispatch => {
   const formData = new FormData();
 
   for (const prop of Object.keys(data)) {
@@ -101,20 +110,16 @@ export const toSignIn = (data) => dispatch => {
 
   axios.post(`${domain}/api/signin`, formData)
     .then((response) => {
-      dispatch(setNotification({
-        open: true,
-        success: 'Вход произошел успешно'
-      }));
+      const { token } = response.data;
+      cookies.set('token', token);
+      dispatch(setNotification({ success: 'Вход произошел успешно' }));
     })
     .catch((error) => {
-      dispatch(setNotification({
-        open: true,
-        error: error.message
-      }));
+      dispatch(setNotification({ error: error.response.data }));
     });
 };
 
-export const toSignUp = (data) => {
+export const toSignUp = data => dispatch => {
   const formData = new FormData();
 
   for (const prop of Object.keys(data)) {
@@ -122,8 +127,12 @@ export const toSignUp = (data) => {
   }
 
   axios.post(`${domain}/api/signup`, formData)
-    .then((response) => console.log(response.data))
-    .catch((error) => console.error(error.response));
+    .then((response) => {
+      dispatch(setNotification({ success: 'Регистрация прошла успешно' }));
+    })
+    .catch((error) => {
+      dispatch(setNotification({ error: error.response.data }));
+    });
 };
 
 export default (initialState = initState) => createStore(reducer, initialState, composeWithDevTools(applyMiddleware(thunk)));

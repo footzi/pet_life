@@ -22,7 +22,7 @@ export default class SignUpController {
         token
       });
     } catch (trace) {
-      const error = { text: 'Ошибка при регистрации', trace };
+      const error = { message: 'Ошибка при регистрации', trace };
 
       res.status(500).send(error);
     }

@@ -9,11 +9,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onClose: () => dispatch(setNotification({
-    open: false,
-    success: '',
-    error: ''
-  })),
+  onClose: () => dispatch(setNotification('')),
 });
 
 const enhance = compose(
@@ -21,7 +17,7 @@ const enhance = compose(
 );
 
 const Notification = enhance(({ notification, onClose }) => (
-  <div className={`notification ${notification.open ? 'is-open' : ''}`}>
+  <div className={`notification ${notification ? 'is-open' : ''}`}>
     {notification.success && (
       <div className='notification__success'>
         {notification.success}
@@ -30,7 +26,11 @@ const Notification = enhance(({ notification, onClose }) => (
 
     {notification.error && (
       <div className='notification__error'>
-        {notification.error}
+        {notification.error.message}
+
+        <div className='notification__trace'>
+          {JSON.stringify(notification.error.trace)}
+        </div>
       </div>
     )}
 

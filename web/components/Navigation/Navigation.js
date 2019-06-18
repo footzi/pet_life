@@ -4,6 +4,9 @@ import React from 'react';
 
 const Navigation = () => (
   <nav className="navigation">
+    <Link href="/">
+      <a>Главная</a>
+    </Link>
     <Link href="/profile">
       <a>Профиль</a>
     </Link>
@@ -13,7 +16,7 @@ const Navigation = () => (
     <Link href="/blog">
       <a>Блог</a>
     </Link>
-    <Link href="/signup">
+    <Link href="/checkin">
       <a>Регистрация</a>
     </Link>
   </nav>

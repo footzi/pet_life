@@ -16,7 +16,6 @@ const mapStateToProps = (state) => {
 const Index = () => (
   <div className="index">
     <Head title="Вход"/>
-
     <h1>Привет, введите свой логин и пароль:</h1>
 
     <SignIn />

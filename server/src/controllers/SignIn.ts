@@ -54,15 +54,13 @@ export default class SignInController {
         res.status(403).send(message);
         return;
       }
-      const payload = {
-        username: user.username,
-        password: user.password
-      };
+
+      const payload = { username: user.name, password: user.password };
       const token = jwt.sign(payload, SECRET);
 
       res.send({
         user: user.username,
-        token: `Bearer ${token}`
+        token
       });
     })(req, res);
   }
