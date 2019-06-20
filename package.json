@@ -5,7 +5,6 @@
   "scripts": {
     "postinstall": "tsc --build & npm run web-build",
     "start": "npm run env-prod & node ./server/build/index.js",
-    "web-dev-old": "cross-env NODE_ENV=development nodemon --watch",
     "web-dev": "ts-node-dev --ignore-watch ./web --respawn --transpileOnly  ./server/src/index.ts",
     "web-next": "next ./web",
     "web-build": "npm run env-prod & next build ./web",
