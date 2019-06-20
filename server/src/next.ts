@@ -9,19 +9,19 @@ const handler = routes.getRequestHandler(app);
 const server = express();
 
 const initNext = (): void => {
-	app.prepare().then((): void => {
-		server.use(proxy('/api', { target: `http://localhost:${config.port.api}` }));
-		server.use(proxy('/upload', { target: `http://localhost:${config.port.api}` }));
-		server.use(handler);
+  app.prepare().then((): void => {
+    server.use(proxy('/api', { target: `http://localhost:${config.port.api}` }));
+    server.use(proxy('/upload', { target: `http://localhost:${config.port.api}` }));
+    server.use(handler);
 
-		server.listen(config.port.next, (err: string): void => {
-			if (err) {
-				throw err;
-			}
+    server.listen(config.port.next, (err: string): void => {
+      if (err) {
+        throw err;
+      }
 
-			console.log(`> Next listening on port ${config.port.next}`);
-		});
-	});
+      console.log(`> Next listening on port ${config.port.next}`);
+    });
+  });
 };
 
 export default initNext;

@@ -1,0 +1,15 @@
+.sign-in {
+    width: 200px;
+    margin-top: 20px;
+    color: #000000;
+}
+
+.sign-in__group {
+    display: flex;
+    margin-bottom: 20px;
+    flex-direction: column;
+
+    label {
+        margin-bottom: 5px;
+    }
+}

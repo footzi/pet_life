@@ -8,16 +8,16 @@ const isDev = process.argv.some((val) => val === '--dev');
 const isProd = process.argv.some((val) => val === '--prod');
 
 const write = (env, type) => {
-    fs.writeFile(config, JSON.stringify(env, null, 2), (err) => {
-        if (err) throw err;
-        console.log(`> Environments setup as ${type}`);
-    });
+  fs.writeFile(config, JSON.stringify(env, null, 2), (err) => {
+    if (err) throw err;
+    console.log(`> Environments setup as ${type}`);
+  });
 };
 
 if (isDev) {
-    write(dev, 'development');
+  write(dev, 'development');
 }
 
 if (isProd) {
-    write(prod, 'production');
+  write(prod, 'production');
 }
