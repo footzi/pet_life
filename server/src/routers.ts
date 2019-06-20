@@ -12,7 +12,7 @@ router.post('/signin', upload.none(), SignInController.signIn);
 router.post('/signup', upload.none(), SignUpController.signUp);
 
 router.get('/about', AuthController.auth, async (req: Request, res: Response): Promise<any> => {
-  const response = await axios.get('https://jsonplaceholder.typicode.com/todos');
+  const response = await axios.get('https://jsonplaceholder.typicode.com/users');
   res.send(response.data);
 });
 

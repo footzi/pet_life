@@ -23,9 +23,6 @@ export default class AuthController {
         try {
           const user = await SignInModel.signIn(payload.username);
 
-          
-          console.log(payload)
-
           if (!user) {
             const message = 'Данного пользователя не существует';
             return done(null, false, { message });
@@ -49,8 +46,6 @@ export default class AuthController {
         res.status(500).send({ err, message: 'Произошла ошибка на сервере' });
         return;
       }
-
-      // console.log(user)
 
       if (!user) {
         res.status(403).send(message);

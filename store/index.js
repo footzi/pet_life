@@ -37,6 +37,7 @@ export const reducer = (state = initState, action) => {
       },
     };
   case actionTypes.GET_ABOUT_DATA:
+    console.log()
     return {
       ...state,
       pages: {
@@ -74,16 +75,15 @@ export const loadHomeData = () => dispatch => axios.get('https://jsonplaceholder
     console.error(`При получении данных для главной страницы произошла ошибка: ${error}`);
   });
 
-export const loadAboutData = () => dispatch => {
-  const token = cookies.get('token');
+export const loadAboutData = (req) => dispatch => {
+  const token = req ? req.cookies.token : cookies.get('token');
   const auth = { Authorization: `Bearer ${token}` };
 
   axios.get(`${domain}/api/about`, { headers: auth })
     .then((response) => {
       const { data } = response;
-      dispatch(setNotification({ success: 'Доступ разрешен' }));
-
-    // dispatch({ type: 'GET_HOME_DATA', data });
+      //dispatch(setNotification({ success: 'Доступ разрешен' }));
+      dispatch({ type: 'GET_ABOUT_DATA', data });
     })
     .catch((error) => {
       dispatch(setNotification({ error: error.response.data }));
