@@ -55,4 +55,20 @@ export default class AuthController {
       next();
     })(req, res);
   }
+
+  public static getUser(req: Request, res: Response): string | false {
+    AuthController.jwtStategy();
+    let id = '';
+
+    passport.authenticate('jwt', (err, user): void => {
+      if (err) {
+        res.status(500).send({ err, message: 'При проверке авторизации произошла ошибка на сервере' });
+        return;
+      }
+
+      id = user.id || false;
+    })(req, res);
+
+    return id;
+  }
 }

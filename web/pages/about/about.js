@@ -3,13 +3,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { loadAboutData } from 'store';
 import './about.scss';
-import { compose, withState, withHandlers } from 'recompose';
+import { compose } from 'recompose';
 
-const mapStateToProps = (state) => {
-  return {
-    items: state.pages.items
-  };
-};
+const mapStateToProps = (state) => ({
+  items: state.pages.about
+});
 
 const enhance = compose(
   connect(

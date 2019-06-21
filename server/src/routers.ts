@@ -16,4 +16,12 @@ router.get('/about', AuthController.auth, async (req: Request, res: Response): P
   res.send(response.data);
 });
 
+router.get('/home', async (req: Request, res: Response): Promise<void> => {
+  const id = AuthController.getUser(req, res);
+  console.log(id);
+  // const response = await axios.get('https://jsonplaceholder.typicode.com/users');
+
+  res.status(200).send({ id, users: response.data });
+});
+
 export default router;

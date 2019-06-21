@@ -59,7 +59,7 @@ export default class SignInController {
       const token = jwt.sign(payload, SECRET);
 
       res.send({
-        user: user.username,
+        id: user.id,
         token
       });
     })(req, res);

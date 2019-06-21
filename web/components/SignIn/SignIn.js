@@ -36,12 +36,12 @@ const SignIn = enhance(({ onInput, onSubmit }) => (
 
     <div className="sign-in__group">
       <label id="name">Введите имя:</label>
-      <input type="text" name="name" autoComplete="off" onChange={onInput}/>
+      <input type="text" name="name" autoComplete="off" onChange={onInput} required/>
     </div>
 
     <div className="sign-in__group">
       <label id="password">Введите пароль:</label>
-      <input type="password" name="password" autoComplete="off" onChange={onInput}/>
+      <input type="password" name="password" autoComplete="off" onChange={onInput} required/>
     </div>
 
     <button type="submit">Войти</button>
