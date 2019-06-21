@@ -4,10 +4,10 @@
     "api": 8080
   },
   "host": {
-    "api": "192.168.0.106"
+    "api": "192.168.43.136"
   },
-  "domain": "http://192.168.0.106:8080",
-  "static": "C:\\projects\\pet_life",
+  "domain": "http://192.168.43.136:8080",
+  "static": "C:\\pet_life",
   "database": {
     "type": "mysql",
     "host": "eu-cdbr-west-02.cleardb.net",

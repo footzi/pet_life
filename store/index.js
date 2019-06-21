@@ -15,6 +15,9 @@ const initState = {
     about: [{ id: 2, title: 'Title' }],
     blog: '',
   },
+  user:{
+    id:''
+  }, 
   notification: ''
 };
 
@@ -23,7 +26,8 @@ export const actionTypes = {
   GET_HOME_DATA: 'GET_HOME_DATA',
   GET_ABOUT_DATA: 'GET_ABOUT_DATA',
   GET_BLOG_DATA: 'GET_BLOG_DATA',
-  SET_NOTIFICATION: 'SET_NOTIFICATION'
+  SET_NOTIFICATION: 'SET_NOTIFICATION',
+  SET_USER: 'SET_USER'
 };
 
 // редьюсеры
@@ -56,6 +60,11 @@ export const reducer = (state = initState, action) => {
       ...state,
       notification: action.data
     };
+  case actionTypes.SET_USER:
+    return {
+      ...state,
+      user: action.data
+    };
   default:
     return state;
   }
@@ -64,6 +73,11 @@ export const reducer = (state = initState, action) => {
 // Экшены, возврашают тип, и какой-либо пэйлоад
 export const setNotification = (data) => dispatch => {
   dispatch({ type: 'SET_NOTIFICATION', data });
+};
+
+export const setUser = (id) => dispatch => {
+  const user = {id};
+  dispatch({ type: 'SET_USER', user});
 };
 
 export const loadHomeData = () => dispatch => axios.get('https://jsonplaceholder.typicode.com/users')
@@ -75,20 +89,21 @@ export const loadHomeData = () => dispatch => axios.get('https://jsonplaceholder
     console.error(`При получении данных для главной страницы произошла ошибка: ${error}`);
   });
 
-export const loadAboutData = (req) => dispatch => {
+export const loadAboutData = (req) => async (dispatch) => {
   const token = req ? req.cookies.token : cookies.get('token');
   const auth = { Authorization: `Bearer ${token}` };
 
-  axios.get(`${domain}/api/about`, { headers: auth })
-    .then((response) => {
-      const { data } = response;
-      //dispatch(setNotification({ success: 'Доступ разрешен' }));
-      dispatch({ type: 'GET_ABOUT_DATA', data });
-    })
-    .catch((error) => {
+  try {
+    const response = await axios.get(`${domain}/api/about`, { headers: auth });
+    const {data} = response;
+
+    dispatch(setNotification({ success: 'Доступ разрешен' }));
+    dispatch({ type: 'GET_ABOUT_DATA', data });    
+
+  } catch(error) {
       dispatch(setNotification({ error: error.response.data }));
       console.error(`При получении данных для cтраницы обо мне произошла ошибка: ${error}`);
-    });
+  }
 };
 
 export const loadBlogData = () => dispatch => axios.get('https://jsonplaceholder.typicode.com/posts')
@@ -110,8 +125,9 @@ export const toSignIn = data => dispatch => {
 
   axios.post(`${domain}/api/signin`, formData)
     .then((response) => {
-      const { token } = response.data;
+      const { token, id } = response.data;
       cookies.set('token', token);
+      dispatch(setUser(id));
       dispatch(setNotification({ success: 'Вход произошел успешно' }));
     })
     .catch((error) => {
@@ -129,6 +145,7 @@ export const toSignUp = data => dispatch => {
   axios.post(`${domain}/api/signup`, formData)
     .then((response) => {
       dispatch(setNotification({ success: 'Регистрация прошла успешно' }));
+      dispatch(setUser(response.data.id));
     })
     .catch((error) => {
       dispatch(setNotification({ error: error.response.data }));

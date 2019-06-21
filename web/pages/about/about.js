@@ -6,10 +6,8 @@ import './about.scss';
 import { compose, withState, withHandlers } from 'recompose';
 
 const mapStateToProps = (state) => {
-  const items = state.pages.about;
-
   return {
-    items
+    items: state.pages.items
   };
 };
 
