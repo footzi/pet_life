@@ -12,7 +12,7 @@ const app = express();
 app.use(express.static(config.static));
 app.use(passport.initialize());
 app.use('/api', cors(), router);
-app.use('/pages', cors(), router);
+// app.use('/pages', cors(), router);
 // app.get('/api/test', (req, res) => {
 //   res.send('hello api test');
 // });

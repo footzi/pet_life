@@ -72,7 +72,7 @@ export const setUser = (id) => dispatch => {
 
 export const loadHomeData = (req) => async (dispatch) => {
   try {
-    const response = await axios.get(`${domain}/pages/home`, { headers: Utils.setAuthToken(req) });
+    const response = await axios.get(`${domain}/api/pages/home`, { headers: Utils.setAuthToken(req) });
     const { id } = response.data;
 
     dispatch(setUser(id));
@@ -84,7 +84,7 @@ export const loadHomeData = (req) => async (dispatch) => {
 
 export const loadAboutData = (req, res) => async (dispatch) => {
   try {
-    const response = await axios.get(`${domain}/pages/about`, { headers: Utils.setAuthToken(req) });
+    const response = await axios.get(`${domain}/api/pages/about`, { headers: Utils.setAuthToken(req) });
     const { users, id } = response.data;
 
     dispatch(setUser(id));
@@ -99,7 +99,7 @@ export const loadAboutData = (req, res) => async (dispatch) => {
 
 export const loadProfileData = (req, res) => async (dispatch) => {
   try {
-    const response = await axios.get(`${domain}/pages/profile`, { headers: Utils.setAuthToken(req) });
+    const response = await axios.get(`${domain}/api/pages/profile`, { headers: Utils.setAuthToken(req) });
     const { id } = response.data;
 
     dispatch(setUser(id));
