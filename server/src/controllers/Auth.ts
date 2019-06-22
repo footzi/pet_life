@@ -48,27 +48,30 @@ export default class AuthController {
       }
 
       if (!user) {
-        res.status(403).send(message);
+        res.status(403).send({
+          message: 'Нет доступа',
+          trace: message
+        });
         return;
       }
 
+      res.locals.userID = user.id;
       next();
     })(req, res);
   }
 
-  public static getUser(req: Request, res: Response): string | false {
+  // Возвращает id пользователя при успешной аутентификации или null
+  public static getUserID(req: Request, res: Response, next: Function): void {
     AuthController.jwtStategy();
-    let id = '';
 
     passport.authenticate('jwt', (err, user): void => {
       if (err) {
-        res.status(500).send({ err, message: 'При проверке авторизации произошла ошибка на сервере' });
+        res.status(500).send({ err, message: 'Произошла ошибка на сервере' });
         return;
       }
 
-      id = user.id || false;
+      res.locals.userID = user ? user.id : null;
+      next();
     })(req, res);
-
-    return id;
   }
 }

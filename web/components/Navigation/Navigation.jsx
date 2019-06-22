@@ -3,6 +3,7 @@ import { Link } from 'web/routes';
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import SignOut from '../SignOut';
 
 const mapStateToProps = (state) => ({
   id: state.user.id
@@ -17,24 +18,26 @@ const enhance = compose(
 const Navigation = enhance(({ id }) => (
   <nav className="navigation">
     {id && (
-      <Link href="/logout">
-        <a>Выйти</a>
-      </Link>
+      <>
+      <SignOut id={id} />
+        <Link href="/profile">
+          <a>Профиль № {id}</a>
+        </Link>
+      </>
     )}
-    <Link href="/">
-      <a>Вход</a>
-    </Link>
-    <Link href="/profile">
-      <a>Профиль № {id}</a>
-    </Link>
-    <Link href="/about">
-      <a>О проекте (список дел)</a>
-    </Link>
     {!id && (
-      <Link href="/checkin">
-        <a>Регистрация</a>
-      </Link>
+      <>
+        <Link href="/">
+          <a>Вход</a>
+        </Link>
+        <Link href="/checkin">
+          <a>Регистрация</a>
+        </Link>
+      </>
     )}
+    <Link href="/about">
+      <a>О проекте (private)</a>
+    </Link>
   </nav>
 ));
 

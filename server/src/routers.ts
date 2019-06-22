@@ -11,17 +11,20 @@ const upload: multer.Instance = multer();
 router.post('/signin', upload.none(), SignInController.signIn);
 router.post('/signup', upload.none(), SignUpController.signUp);
 
-router.get('/about', AuthController.auth, async (req: Request, res: Response): Promise<any> => {
+router.get('/about', AuthController.auth, async (req: Request, res: Response): Promise<void> => {
   const response = await axios.get('https://jsonplaceholder.typicode.com/users');
-  res.send(response.data);
+  res.send({
+    id: res.locals.userID,
+    users: response.data
+  });
 });
 
-router.get('/home', async (req: Request, res: Response): Promise<void> => {
-  const id = AuthController.getUser(req, res);
-  console.log(id);
-  // const response = await axios.get('https://jsonplaceholder.typicode.com/users');
+router.get('/home', AuthController.getUserID, (req: Request, res: Response): void => {
+  res.send({ id: res.locals.userID });
+});
 
-  res.status(200).send({ id, users: response.data });
+router.get('/profile', AuthController.getUserID, (req: Request, res: Response): void => {
+  res.send({ id: res.locals.userID });
 });
 
 export default router;

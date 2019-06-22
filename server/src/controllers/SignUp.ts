@@ -16,7 +16,7 @@ export default class SignUpController {
         password: user.password
       };
       const token = jwt.sign(payload, SECRET);
-      
+
       res.send({
         id: user.id,
         token

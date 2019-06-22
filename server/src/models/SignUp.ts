@@ -2,11 +2,11 @@ import { getRepository } from 'typeorm';
 import User from '../entities/User';
 import { IUser } from '../interfaces';
 
-const user = new User();
-
 export default class SignUpModel {
   // Регистрация пользователя
   public static async signUp(body: IUser): Promise<IUser> {
+    const user = new User();
+
     const checkUser = await getRepository(User)
       .findOne({ name: body.name })
       .then((result): IUser | null => result || null)

@@ -26,8 +26,8 @@ const About = enhance(({ items }) => (
   </div>
 ));
 
-About.getInitialProps = async ({ store, req }) => {
-  await store.dispatch(loadAboutData(req));
+About.getInitialProps = async ({ store, req, res }) => {
+  await store.dispatch(loadAboutData(req, res));
 };
 
 export default About;

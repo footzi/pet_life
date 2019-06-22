@@ -2,19 +2,16 @@ import axios from 'axios';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { applyMiddleware, createStore } from 'redux';
-import { Cookies } from 'react-cookie';
-import Router from 'next/router';
+import Utils from './utils';
 
 const { domain } = require('../server.config');
-
-const cookies = new Cookies();
 
 // начальное состояние
 const initState = {
   pages: {
     home: [{ id: 1, name: 'Home' }],
     about: [{ id: 2, title: 'Title' }],
-    blog: '',
+    profile: {}
   },
   user: {
     id: ''
@@ -24,9 +21,9 @@ const initState = {
 
 // алиасы для экшенов
 export const actionTypes = {
-  GET_HOME_DATA: 'GET_HOME_DATA',
-  GET_ABOUT_DATA: 'GET_ABOUT_DATA',
-  GET_BLOG_DATA: 'GET_BLOG_DATA',
+  SET_HOME_DATA: 'SET_HOME_DATA',
+  SET_ABOUT_DATA: 'SET_ABOUT_DATA',
+  SET_PROFILE_DATA: 'SET_PROFILE_DATA',
   SET_NOTIFICATION: 'SET_NOTIFICATION',
   SET_USER: 'SET_USER'
 };
@@ -34,25 +31,18 @@ export const actionTypes = {
 // редьюсеры
 export const reducer = (state = initState, action) => {
   switch (action.type) {
-  case actionTypes.GET_HOME_DATA:
+  case actionTypes.SET_HOME_DATA:
     return {
       ...state,
       pages: {
         ...state.pages, home: action.data,
       },
     };
-  case actionTypes.GET_ABOUT_DATA:
+  case actionTypes.SET_ABOUT_DATA:
     return {
       ...state,
       pages: {
-        ...state.pages, about: action.data,
-      },
-    };
-  case actionTypes.GET_BLOG_DATA:
-    return {
-      ...state,
-      pages: {
-        ...state.pages, blog: action.data,
+        ...state.pages, about: action.users,
       },
     };
   case actionTypes.SET_NOTIFICATION:
@@ -80,43 +70,42 @@ export const setUser = (id) => dispatch => {
   dispatch({ type: 'SET_USER', user });
 };
 
-// export const loadHomeData = () => dispatch => axios.get('https://jsonplaceholder.typicode.com/users')
-//   .then((response) => {
-//     const { data } = response;
-//     dispatch({ type: 'GET_HOME_DATA', data });
-//   })
-//   .catch((error) => {
-//     console.error(`При получении данных для главной страницы произошла ошибка: ${error}`);
-//   });
 export const loadHomeData = (req) => async (dispatch) => {
-  const token = req ? req.cookies.token : cookies.get('token');
-  const auth = { Authorization: `Bearer ${token}` };
-
-  console.log(token)
-
   try {
-    const response = await axios.get(`${domain}/pages/home`, { headers: auth });
-    const { data } = response;
+    const response = await axios.get(`${domain}/pages/home`, { headers: Utils.setAuthToken(req) });
+    const { id } = response.data;
 
-    dispatch({ type: 'GET_HOME_DATA', data });
+    dispatch(setUser(id));
+    // dispatch({ type: 'SET_HOME_DATA', users });
   } catch (error) {
     console.error(`При получении данных для главной страницы произошла ошибка: ${error}`);
   }
 };
 
-export const loadAboutData = (req) => async (dispatch) => {
-  const token = req ? req.cookies.token : cookies.get('token');
-  const auth = { Authorization: `Bearer ${token}` };
-
+export const loadAboutData = (req, res) => async (dispatch) => {
   try {
-    const response = await axios.get(`${domain}/api/about`, { headers: auth });
-    const { data } = response;
+    const response = await axios.get(`${domain}/pages/about`, { headers: Utils.setAuthToken(req) });
+    const { users, id } = response.data;
 
+    dispatch(setUser(id));
     dispatch(setNotification({ success: 'Доступ разрешен' }));
-    dispatch({ type: 'GET_ABOUT_DATA', data });
+    dispatch({ type: 'SET_ABOUT_DATA', users });
   } catch (error) {
+    Utils.forbiddenRedirect(res, '/');
     dispatch(setNotification({ error: error.response.data }));
     console.error(`При получении данных для cтраницы обо мне произошла ошибка: ${error}`);
+  }
+};
+
+export const loadProfileData = (req, res) => async (dispatch) => {
+  try {
+    const response = await axios.get(`${domain}/pages/profile`, { headers: Utils.setAuthToken(req) });
+    const { id } = response.data;
+
+    dispatch(setUser(id));
+  } catch (error) {
+    Utils.forbiddenRedirect(res, '/');
+    dispatch(setNotification({ error: error.response.data }));
   }
 };
 
@@ -130,10 +119,11 @@ export const toSignIn = data => dispatch => {
   axios.post(`${domain}/api/signin`, formData)
     .then((response) => {
       const { token, id } = response.data;
-      cookies.set('token', token);
+
+      Utils.setCookieToken(token);
+      Utils.redirect('/profile');
       dispatch(setUser(id));
       dispatch(setNotification({ success: 'Вход произошел успешно' }));
-      Router.push('/profile');
     })
     .catch((error) => {
       dispatch(setNotification({ error: error.response.data }));
@@ -149,13 +139,22 @@ export const toSignUp = data => dispatch => {
 
   axios.post(`${domain}/api/signup`, formData)
     .then((response) => {
+      const { token, id } = response.data;
+
+      Utils.setCookieToken(token);
+      Utils.redirect('/profile');
       dispatch(setNotification({ success: 'Регистрация прошла успешно' }));
-      dispatch(setUser(response.data.id));
-      Router.push('/profile');
+      dispatch(setUser(id));
     })
     .catch((error) => {
       dispatch(setNotification({ error: error.response.data }));
     });
+};
+
+export const toSignOut = id => dispatch => {
+  Utils.removeCookieToken();
+  Utils.redirect('/');
+  dispatch(setUser(''));
 };
 
 export default (initialState = initState) => createStore(reducer, initialState, composeWithDevTools(applyMiddleware(thunk)));
