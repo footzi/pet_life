@@ -1,5 +1,5 @@
 import React from 'react';
-import './notification.scss';
+import './Notification.scss';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { setNotification } from 'store';
