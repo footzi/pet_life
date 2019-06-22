@@ -1,4 +1,4 @@
-import './Signin.scss';
+import './SignIn.scss';
 import React from 'react';
 import { toSignIn } from 'store';
 import { connect } from 'react-redux';
