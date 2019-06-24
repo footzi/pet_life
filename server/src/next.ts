@@ -13,6 +13,7 @@ const initNext = (): void => {
   app.prepare().then((): void => {
     server.use(cookieParser());
     server.use(proxy('/api', { target: `http://localhost:${config.port.api}` }));
+    server.use(proxy('/pages', { target: `http://localhost:${config.port.api}` }));
     server.use(proxy('/upload', { target: `http://localhost:${config.port.api}` }));
     server.use(handler);
 

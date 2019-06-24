@@ -2,7 +2,8 @@ import { createConnection } from 'typeorm';
 import express from 'express';
 import cors from 'cors';
 import passport from 'passport';
-import router from './routers';
+import api from './routers/api';
+import pages from './routers/pages'
 import initNext from './next';
 
 const config = require('../../server.config.json');
@@ -11,11 +12,8 @@ const app = express();
 
 app.use(express.static(config.static));
 app.use(passport.initialize());
-app.use('/api', cors(), router);
-// app.use('/pages', cors(), router);
-// app.get('/api/test', (req, res) => {
-//   res.send('hello api test');
-// });
+app.use('/api', cors(), api);
+app.use('/pages', cors(), pages);
 
 createConnection(config.database)
   .then((): void => {
