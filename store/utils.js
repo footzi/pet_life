@@ -13,10 +13,10 @@ export default class Utils {
   }
 
   /**
-   * Удаляем куки при разлогировании
+   * Удаляет куки при разлогировании
    */
   static removeCookieToken() {
-    cookies.remove('token');
+    cookies.remove('token', { path: '/' });
   }
 
   /**

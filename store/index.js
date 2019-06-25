@@ -16,6 +16,7 @@ const initState = {
   user: {
     id: ''
   },
+  profile: {},
   notification: ''
 };
 
@@ -44,6 +45,11 @@ export const reducer = (state = initState, action) => {
       pages: {
         ...state.pages, about: action.users,
       },
+    };
+  case actionTypes.SET_PROFILE_DATA:
+    return {
+      ...state,
+      profile: action.profile
     };
   case actionTypes.SET_NOTIFICATION:
     return {
@@ -75,7 +81,7 @@ export const loadHomeData = (req) => async (dispatch) => {
     const response = await axios.get(`${domain}/pages/home`, { headers: Utils.setAuthToken(req) });
     const { id } = response.data;
 
-    dispatch(setUser(id));
+    // dispatch(setUser(id));
     // dispatch({ type: 'SET_HOME_DATA', users });
   } catch (error) {
     console.error(`При получении данных для главной страницы произошла ошибка: ${error}`);
@@ -97,15 +103,13 @@ export const loadAboutData = (req, res) => async (dispatch) => {
   }
 };
 
-export const loadProfileData = (req, res) => async (dispatch) => {
-  const formData = new FormData();
-  formData.append('id', 1);
-
+export const loadProfileData = (req, res, id) => async (dispatch) => {
   try {
-    const response = await axios.get(`${domain}/pages/profile`, formData, { headers: Utils.setAuthToken(req) });
-    // const { id } = response.data;
+    const response = await axios.post(`${domain}/pages/profile`, { id }, { headers: Utils.setAuthToken(req) });
+    const profile = response.data;
 
-    // dispatch(setUser(id));
+    dispatch(setUser(response.data.id));
+    dispatch({ type: 'SET_PROFILE_DATA', profile });
   } catch (error) {
     Utils.forbiddenRedirect(res, '/');
     dispatch(setNotification({ error: error.response.data }));
@@ -124,7 +128,7 @@ export const toSignIn = data => dispatch => {
       const { token, id } = response.data;
 
       Utils.setCookieToken(token);
-      Utils.redirect('/profile');
+      Utils.redirect(`/profile/${id}`);
       dispatch(setUser(id));
       dispatch(setNotification({ success: 'Вход произошел успешно' }));
     })
@@ -145,7 +149,7 @@ export const toSignUp = data => dispatch => {
       const { token, id } = response.data;
 
       Utils.setCookieToken(token);
-      Utils.redirect('/profile');
+      Utils.redirect(`/profile/${id}`);
       dispatch(setNotification({ success: 'Регистрация прошла успешно' }));
       dispatch(setUser(id));
     })

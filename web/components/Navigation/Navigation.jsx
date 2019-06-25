@@ -20,7 +20,7 @@ const Navigation = enhance(({ id }) => (
     {id && (
       <>
       <SignOut id={id} />
-        <Link href="/profile">
+        <Link href={`/profile/${id}`}>
           <a>Профиль № {id}</a>
         </Link>
       </>

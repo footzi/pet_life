@@ -20,6 +20,6 @@ router.get('/home', AuthController.getUserID, (req: Request, res: Response): voi
   res.send({ id: res.locals.userID });
 });
 
-router.get('/profile', AuthController.auth, ProfileController.getProfile);
+router.post('/profile', AuthController.auth, ProfileController.getProfile);
 
 export default router;

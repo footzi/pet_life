@@ -1,15 +1,18 @@
 import { createConnection } from 'typeorm';
+import bodyParser from 'body-parser';
 import express from 'express';
 import cors from 'cors';
 import passport from 'passport';
 import api from './routers/api';
-import pages from './routers/pages'
+import pages from './routers/pages';
 import initNext from './next';
 
 const config = require('../../server.config.json');
 
 const app = express();
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(express.static(config.static));
 app.use(passport.initialize());
 app.use('/api', cors(), api);
