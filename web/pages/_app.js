@@ -1,6 +1,6 @@
 import App, { Container } from 'next/app';
 import makeStore from 'store';
-import Navigation from 'components/Navigation/Navigation';
+import Navigation from 'components/Navigation';
 import Notification from 'components/Notification';
 import { Provider } from 'react-redux';
 import React from 'react';

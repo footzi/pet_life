@@ -1,3 +1,4 @@
+const cookieParser = require('cookie-parser');
 const next = require('next');
 const express = require('express');
 const proxy = require('http-proxy-middleware');
@@ -10,7 +11,9 @@ const server = express();
 
 const initNext = (): void => {
   app.prepare().then((): void => {
+    server.use(cookieParser());
     server.use(proxy('/api', { target: `http://localhost:${config.port.api}` }));
+    server.use(proxy('/pages', { target: `http://localhost:${config.port.api}` }));
     server.use(proxy('/upload', { target: `http://localhost:${config.port.api}` }));
     server.use(handler);
 

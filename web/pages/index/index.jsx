@@ -22,8 +22,8 @@ const Index = () => (
   </div>
 );
 
-Index.getInitialProps = async ({ store }) => {
-  await store.dispatch(loadHomeData());
+Index.getInitialProps = async ({ store, req }) => {
+  await store.dispatch(loadHomeData(req));
 };
 
 export default connect(mapStateToProps)(Index);

@@ -23,9 +23,6 @@ export default class AuthController {
         try {
           const user = await SignInModel.signIn(payload.username);
 
-          
-          console.log(payload)
-
           if (!user) {
             const message = 'Данного пользователя не существует';
             return done(null, false, { message });
@@ -50,13 +47,30 @@ export default class AuthController {
         return;
       }
 
-      // console.log(user)
-
       if (!user) {
-        res.status(403).send(message);
+        res.status(403).send({
+          message: 'Нет доступа',
+          trace: message
+        });
         return;
       }
 
+      res.locals.userID = user.id;
+      next();
+    })(req, res);
+  }
+
+  // Возвращает id пользователя при успешной аутентификации или null
+  public static getUserID(req: Request, res: Response, next: Function): void {
+    AuthController.jwtStategy();
+
+    passport.authenticate('jwt', (err, user): void => {
+      if (err) {
+        res.status(500).send({ err, message: 'Произошла ошибка на сервере' });
+        return;
+      }
+
+      res.locals.userID = user ? user.id : null;
       next();
     })(req, res);
   }
