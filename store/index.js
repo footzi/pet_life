@@ -154,7 +154,8 @@ export const toSignUp = data => dispatch => {
       dispatch(setUser(id));
     })
     .catch((error) => {
-      dispatch(setNotification({ error: error.response.data }));
+      const { message } = error.response.data.error;
+      dispatch(setNotification({ error: message }));
     });
 };
 

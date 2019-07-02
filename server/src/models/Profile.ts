@@ -7,6 +7,7 @@ export default class ProfileModel {
   public static async getProfile(id: number): Promise<IUser> {
     return getRepository(User)
       .findOne({ id })
+      // @ts-ignore
       .then((result): IUser => result)
       .catch((error): IUser => {
         throw error;

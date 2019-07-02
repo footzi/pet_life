@@ -1,10 +1,12 @@
 import { Request, Response } from 'express';
 import ProfileModel from '../models/Profile';
+import { errorMessage } from '../utils';
 
 export default class ProfileController {
   public static async getProfile(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.body;
+
       const profile = await ProfileModel.getProfile(id);
       const response = {
         id: profile.id,
@@ -14,10 +16,8 @@ export default class ProfileController {
       };
 
       res.status(200).send(response);
-    } catch (trace) {
-      const error = { message: 'Ошибка при получении профиля', trace };
-
-      res.status(500).send(error);
+    } catch (err) {
+      res.status(403).send(errorMessage(err));
     }
   }
 }

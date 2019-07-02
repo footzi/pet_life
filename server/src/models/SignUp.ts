@@ -1,28 +1,28 @@
 import { getRepository } from 'typeorm';
 import User from '../entities/User';
-import { IUser } from '../interfaces';
+import { IUser, IFormLogin } from '../interfaces';
 
 export default class SignUpModel {
   // Регистрация пользователя
-  public static async signUp(body: IUser): Promise<IUser> {
+  public static async signUp(body: IFormLogin): Promise<IUser> {
     const user = new User();
 
     const checkUser = await getRepository(User)
       .findOne({ name: body.name })
-      .then((result): IUser | null => result || null)
-      .catch((error): IUser => {
+      // @ts-ignore
+      .then((result: IUser): IUser | null => result || null)
+      .catch((error: Error): Error => {
         throw error;
       });
 
     if (checkUser) {
-      const error = { message: 'Данный пользователь уже существует' };
-      throw error;
+      throw new Error('Данный пользователь уже существует');
     }
 
     const newUser = await getRepository(User)
       .save(Object.assign(user, body))
-      .then((result): IUser => result)
-      .catch((error): IUser => {
+      .then((result: IUser): IUser => result)
+      .catch((error: Error): IUser => {
         throw error;
       });
 
