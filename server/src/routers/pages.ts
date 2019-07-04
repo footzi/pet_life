@@ -11,15 +11,17 @@ const upload: multer.Instance = multer();
 router.get('/about', AuthController.auth, async (req: Request, res: Response): Promise<void> => {
   const response = await axios.get('https://jsonplaceholder.typicode.com/users');
   res.send({
-    id: res.locals.userID,
-    users: response.data
+    user: res.locals.user,
+    todos: response.data
   });
 });
 
-router.get('/home', AuthController.getUserID, (req: Request, res: Response): void => {
-  res.send({ id: res.locals.userID });
+// getUser для незакрытых страниц
+router.get('/home', AuthController.getUser, (req: Request, res: Response): void => {
+  console.log(req.cookies)
+  res.send({ user: res.locals.user });
 });
 
-router.post('/profile', AuthController.auth, ProfileController.getProfile);
+router.get('/profile', AuthController.auth, ProfileController.getProfile);
 
 export default router;

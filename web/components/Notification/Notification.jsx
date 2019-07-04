@@ -26,7 +26,7 @@ const Notification = enhance(({ notification, onClose }) => (
 
     {notification.error && (
       <div className='notification__error'>
-        {notification.error}
+        {notification.error.message}
       </div>
     )}
 

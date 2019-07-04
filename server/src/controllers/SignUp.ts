@@ -22,11 +22,9 @@ export default class SignUpController {
         password: user.password
       };
       const token = jwt.sign(payload, SECRET);
+      const response = { id: user.id, token };
 
-      res.send({
-        id: user.id,
-        token
-      });
+      res.send({ user: response });
     } catch (err) {
       res.status(500).send(errorMessage(err));
     }

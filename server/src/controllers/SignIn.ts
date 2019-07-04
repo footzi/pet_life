@@ -46,7 +46,7 @@ export default class SignInController {
   public static signIn(req: Request, res: Response): void {
     if (!checkTypeValue(req.body.name, 'string') || !checkTypeValue(req.body.password, 'string')) {
       const err = new Error('Oт клиента получены неверные данные');
-      res.status(500).send(errorMessage(err));
+      res.status(403).send(errorMessage(err));
       return;
     }
 
@@ -70,11 +70,9 @@ export default class SignInController {
 
       const payload = { username: user.name, password: user.password };
       const token = jwt.sign(payload, SECRET);
+      const response = { id: user.id, token };
 
-      res.send({
-        id: user.id,
-        token
-      });
+      res.send({ user: response });
     })(req, res);
   }
 }

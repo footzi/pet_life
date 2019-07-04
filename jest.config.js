@@ -14,6 +14,6 @@ module.exports = {
     }
   },
   testMatch: [
-    '**/__tests__/*.+(ts|tsx|js)'
+    '**/__tests__/_*.+(ts|tsx|js)'
   ]
 };

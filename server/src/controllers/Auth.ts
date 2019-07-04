@@ -3,7 +3,7 @@ import passport from 'passport';
 import passportJwt from 'passport-jwt';
 import SignInModel from '../models/SignIn';
 import { IPayloadJWT, IErrorTypeMessage } from '../interfaces';
-import { errorMessage, errorTypeMessage } from '../utils';
+import { checkTypeValue, errorMessage, errorTypeMessage } from '../utils';
 
 const SECRET = require('../../../server.config.json').secret;
 
@@ -40,6 +40,12 @@ export default class AuthController {
 
   // Проверяет доступен ли пользователю данный маршрут
   public static auth(req: Request, res: Response, next: Function): void {
+    if (!checkTypeValue(req.body.id, 'number')) {
+      const err = new Error('Oт клиента неполучен id');
+      res.status(403).send(errorMessage(err));
+      return;
+    }
+
     AuthController.jwtStategy();
 
     passport.authenticate('jwt', (err: IErrorTypeMessage, user): void => {
@@ -59,20 +65,23 @@ export default class AuthController {
         return;
       }
 
+      res.locals.user = user ? { id: user.id } : null;
       next();
     })(req, res);
   }
 
   // Возвращает id пользователя при успешной аутентификации или null
-  public static getUserID(req: Request, res: Response, next: Function): void {
+  public static getUser(req: Request, res: Response, next: Function): void {
     AuthController.jwtStategy();
 
-    passport.authenticate('jwt', (err): void => {
+    passport.authenticate('jwt', (err, user): void => {
       if (err) {
-        res.status(500).send({ err, message: 'Произошла ошибка на сервере' });
+        const error = new Error('При проверке авторизации произошла ошибка');
+        res.status(500).send(errorMessage(error));
         return;
       }
 
+      res.locals.user = user ? { id: user.id } : null;
       next();
     })(req, res);
   }

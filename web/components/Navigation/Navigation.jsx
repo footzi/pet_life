@@ -6,7 +6,7 @@ import { compose } from 'recompose';
 import SignOut from '../SignOut';
 
 const mapStateToProps = (state) => ({
-  id: state.user.id
+  user: state.user
 });
 
 const enhance = compose(
@@ -15,17 +15,17 @@ const enhance = compose(
   )
 );
 
-const Navigation = enhance(({ id }) => (
+const Navigation = enhance(({ user }) => (
   <nav className="navigation">
-    {id && (
+    {user.id && (
       <>
-      <SignOut id={id} />
-        <Link href={`/profile/${id}`}>
-          <a>Профиль № {id}</a>
+      <SignOut id={user.id} />
+        <Link href={`/profile/${user.id}`}>
+          <a>Профиль № {user.id}</a>
         </Link>
       </>
     )}
-    {!id && (
+    {!user.id && (
       <>
         <Link href="/">
           <a>Вход</a>
