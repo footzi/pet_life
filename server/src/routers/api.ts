@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import multer from 'multer';
 import SignInController from '../controllers/SignIn';
 import SignUpController from '../controllers/SignUp';

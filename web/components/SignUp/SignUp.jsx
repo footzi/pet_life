@@ -48,7 +48,7 @@ const SignUp = enhance(({ onInput, onSubmit }) => (
 
     <div className="sign-up__group">
       <label>Введите пароль:
-        <input type="password" name="password" autoComplete="off" onChange={onInput} required/>
+        <input type="password" name="password" autoComplete="off" onChange={onInput}/>
       </label>
     </div>
 

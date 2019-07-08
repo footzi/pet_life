@@ -12,9 +12,10 @@
     "run-android": "react-native run-android",
     "env-dev": "node environments --dev",
     "env-prod": "node environments --prod",
+    "env-test": "node environments --test",
     "lint": "eslint -c .eslintrc --ext .js,.ts ./",
     "lint-fix": "eslint -c .eslintrc --ext .js,.ts ./ --fix",
-    "test": "jest"
+    "test": "npm run env-test && jest"
   },
   "dependencies": {
     "@types/bcrypt": "^3.0.0",
@@ -41,6 +42,7 @@
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
+    "randomstring": "^1.1.5",
     "react": "16.8.3",
     "react-cookie": "^4.0.0",
     "react-dom": "^16.8.6",
@@ -52,11 +54,14 @@
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
+    "supertest": "^4.0.2",
+    "ts-jest": "^24.0.2",
     "typeorm": "^0.2.17"
   },
   "devDependencies": {
     "@babel/core": "7.4.5",
     "@babel/runtime": "7.4.5",
+    "@types/cookie-parser": "^1.4.1",
     "@types/cors": "^2.8.5",
     "@types/express": "^4.16.1",
     "@types/jsonwebtoken": "^8.3.2",
@@ -80,6 +85,6 @@
     "typescript": "^3.4.5"
   },
   "jest": {
-    "preset": "react-native"
+    "verbose": true
   }
 }

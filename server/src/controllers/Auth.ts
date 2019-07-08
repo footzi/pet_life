@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import passport from 'passport';
 import passportJwt from 'passport-jwt';
 import SignInModel from '../models/SignIn';
-import { IPayloadJWT } from '../interfaces';
+import { IPayloadJWT, IErrorTypeMessage } from '../interfaces';
+import { errorMessage, errorTypeMessage } from '../utils';
 
 const SECRET = require('../../../server.config.json').secret;
 
@@ -18,21 +19,21 @@ export default class AuthController {
     };
 
     passport.use('jwt', new JwtStrategy(options,
-      // eslint-disable-next-line
       async (payload: IPayloadJWT, done: Function): Promise<void> => {
         try {
           const user = await SignInModel.signIn(payload.username);
 
+          // где-то тут проверка на соответсвтие id из базы и полученного от клиента. Т.к получение данных для
+          // запроса в бд идет из токена
           if (!user) {
-            const message = 'Данного пользователя не существует';
-            return done(null, false, { message });
+            const error = errorTypeMessage('user_undefined', 'Данного пользователя не существует');
+            return done(error, false);
           }
 
-          if (user) {
-            return done(null, user);
-          }
+          return done(null, user);
         } catch (err) {
-          return done(err, false);
+          const error = errorTypeMessage('critical', err);
+          return done(error, false);
         }
       }));
   }
@@ -41,36 +42,41 @@ export default class AuthController {
   public static auth(req: Request, res: Response, next: Function): void {
     AuthController.jwtStategy();
 
-    passport.authenticate('jwt', (err, user, message): void => {
-      if (err) {
-        res.status(500).send({ err, message: 'Произошла ошибка на сервере' });
+    passport.authenticate('jwt', (err: IErrorTypeMessage, user): void => {
+      if (err && err.type === 'critical') {
+        res.status(500).send(errorMessage(err.content));
+        return;
+      }
+
+      if (err && err.type === 'user_undefined') {
+        res.status(403).send(errorMessage(err.content));
         return;
       }
 
       if (!user) {
-        res.status(403).send({
-          message: 'Нет доступа',
-          trace: message
-        });
+        const error = new Error('Для данного пользователя отказано в доступе');
+        res.status(403).send(errorMessage(error));
         return;
       }
 
-      res.locals.userID = user.id;
+      res.locals.user = user ? { id: user.id } : null;
+
       next();
     })(req, res);
   }
 
   // Возвращает id пользователя при успешной аутентификации или null
-  public static getUserID(req: Request, res: Response, next: Function): void {
+  public static getUser(req: Request, res: Response, next: Function): void {
     AuthController.jwtStategy();
 
     passport.authenticate('jwt', (err, user): void => {
       if (err) {
-        res.status(500).send({ err, message: 'Произошла ошибка на сервере' });
+        const error = new Error('При проверке авторизации произошла ошибка');
+        res.status(500).send(errorMessage(error));
         return;
       }
 
-      res.locals.userID = user ? user.id : null;
+      res.locals.user = user ? { id: user.id } : null;
       next();
     })(req, res);
   }

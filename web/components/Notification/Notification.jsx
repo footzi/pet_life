@@ -27,10 +27,6 @@ const Notification = enhance(({ notification, onClose }) => (
     {notification.error && (
       <div className='notification__error'>
         {notification.error.message}
-
-        <div className='notification__trace'>
-          {JSON.stringify(notification.error.trace)}
-        </div>
       </div>
     )}
 

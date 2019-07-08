@@ -3,13 +3,13 @@ const next = require('next');
 const express = require('express');
 const proxy = require('http-proxy-middleware');
 const routes = require('../../web/routes');
-const config = require('../../server.config');
+const config = require('../../server.config.json');
 
 const app = next({ dev: process.env.NODE_ENV !== 'production', dir: './web' });
 const handler = routes.getRequestHandler(app);
 const server = express();
 
-const initNext = (): void => {
+export const listenNext = (): void => {
   app.prepare().then((): void => {
     server.use(cookieParser());
     server.use(proxy('/api', { target: `http://localhost:${config.port.api}` }));
@@ -27,4 +27,4 @@ const initNext = (): void => {
   });
 };
 
-export default initNext;
+export default listenNext;
