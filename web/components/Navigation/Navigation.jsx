@@ -20,22 +20,22 @@ const Navigation = enhance(({ user }) => (
     {user.id && (
       <>
       <SignOut id={user.id} />
-        <Link href={`/profile/${user.id}`}>
+        <Link route={`/profile/${user.id}`}>
           <a>Профиль № {user.id}</a>
         </Link>
       </>
     )}
     {!user.id && (
       <>
-        <Link href="/">
+        <Link route="/">
           <a>Вход</a>
         </Link>
-        <Link href="/checkin">
+        <Link route="/checkin">
           <a>Регистрация</a>
         </Link>
       </>
     )}
-    <Link href="/about">
+    <Link route="/about">
       <a>О проекте (private)</a>
     </Link>
   </nav>

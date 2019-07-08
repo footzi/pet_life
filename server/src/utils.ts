@@ -1,9 +1,8 @@
 import { IErrorMessage, IErrorTypeMessage } from './interfaces';
 
 // Проверяет существование и тип переменной
-export const checkTypeValue = (value: any = false, type: string = 'string'): boolean => {
-  return value && typeof value === type;
-};
+// eslint-disable-next-line
+export const checkTypeValue = (value: any = false, type: string = 'string'): boolean => value && typeof value === type;
 
 // Возвращает объект ошибки
 export const errorMessage = (err: Error): IErrorMessage => {

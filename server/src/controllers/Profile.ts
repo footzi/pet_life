@@ -8,11 +8,9 @@ export default class ProfileController {
     const requestId = Number(req.body.id);
     const tokenId = res.locals.user.id;
     const checkTypeId = checkTypeValue(requestId, 'number') && checkTypeValue(tokenId, 'number');
-    const checkValidId = requestId === checkTypeId;
+    const checkValidId = requestId === tokenId;
 
-    console.log(checkValidId);
-
-    if (!checkTypeValue(req.body.name, 'string') || !checkTypeValue(req.body.password, 'string')) {
+    if (!checkTypeId || !checkValidId) {
       const err = new Error('Oт клиента получены неверные данные');
       res.status(403).send(errorMessage(err));
       return;
@@ -20,10 +18,11 @@ export default class ProfileController {
 
     try {
       const profile = await ProfileModel.getProfile(req.body.id);
-      const { name, surname, createDate } = profile;
+      const { id, name, surname, createDate } = profile;
       const response = {
         user: res.locals.user,
         profile: {
+          id,
           name,
           surname,
           createDate

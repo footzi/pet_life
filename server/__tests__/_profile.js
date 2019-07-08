@@ -46,4 +46,17 @@ describe('Профиль', () => {
     expect(error).toHaveProperty('message');
     expect(error).toHaveProperty('stack');
   });
+
+  it('C правильном токеном, но с неверным id получаем 403 и сообщение об ошибке', async () => {
+    const result = await request(app)
+      .post('/pages/profile')
+      .set('Authorization', `Bearer ${mockUser.token}`)
+      .send({ id: randomstring.generate() });
+
+    const { error } = JSON.parse(result.error.text);
+
+    expect(result.statusCode).toEqual(403);
+    expect(error).toHaveProperty('message');
+    expect(error).toHaveProperty('stack');
+  });
 });

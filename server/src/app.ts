@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(config.static));
 app.use(passport.initialize());
-app.use('/api', cors(), api);
+app.use('/api', cors({ credentials: true, origin: `http://localhost:${config.port.next}` }), api);
 app.use('/pages', cors({ credentials: true, origin: `http://localhost:${config.port.next}` }), pages);
 
 export const listenApp = (): void => {

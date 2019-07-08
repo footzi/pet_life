@@ -3,7 +3,7 @@ import passport from 'passport';
 import passportJwt from 'passport-jwt';
 import SignInModel from '../models/SignIn';
 import { IPayloadJWT, IErrorTypeMessage } from '../interfaces';
-import { checkTypeValue, errorMessage, errorTypeMessage } from '../utils';
+import { errorMessage, errorTypeMessage } from '../utils';
 
 const SECRET = require('../../../server.config.json').secret;
 
@@ -61,8 +61,6 @@ export default class AuthController {
 
       res.locals.user = user ? { id: user.id } : null;
 
-      
-      console.log(res.locals);
       next();
     })(req, res);
   }
