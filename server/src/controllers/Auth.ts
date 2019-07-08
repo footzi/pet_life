@@ -40,12 +40,6 @@ export default class AuthController {
 
   // Проверяет доступен ли пользователю данный маршрут
   public static auth(req: Request, res: Response, next: Function): void {
-    if (!checkTypeValue(req.body.id, 'number')) {
-      const err = new Error('Oт клиента неполучен id');
-      res.status(403).send(errorMessage(err));
-      return;
-    }
-
     AuthController.jwtStategy();
 
     passport.authenticate('jwt', (err: IErrorTypeMessage, user): void => {
@@ -66,6 +60,9 @@ export default class AuthController {
       }
 
       res.locals.user = user ? { id: user.id } : null;
+
+      
+      console.log(res.locals);
       next();
     })(req, res);
   }

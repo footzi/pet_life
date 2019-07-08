@@ -77,7 +77,7 @@ export const setUser = (user) => dispatch => {
 
 export const loadHomeData = (req) => async (dispatch) => {
   try {
-    const response = await axios.get(`${domain}/pages/home`, { headers: Utils.setAuthToken(req), withCredentials: true });
+    const response = await axios.get(`${domain}/pages/home`, { headers: Utils.setAuthData(req), withCredentials: true });
     const { user } = response.data;
 
     dispatch(setUser(user));
@@ -87,14 +87,14 @@ export const loadHomeData = (req) => async (dispatch) => {
   }
 };
 
-export const loadAboutData = (req, res) => async (dispatch) => {
+export const loadAboutData = (req) => async (dispatch) => {
   try {
-    const response = await axios.get(`${domain}/pages/about`, { withCredentials: true });
+    const response = await axios.get(`${domain}/pages/about`, { headers: Utils.setAuthData(req), withCredentials: true });
     const { user, todos } = response.data;
 
-    // dispatch(setUser(user));
-    // dispatch(setNotification({ success: 'Доступ разрешен' }));
-    // dispatch({ type: 'SET_ABOUT_DATA', todos });
+    dispatch(setUser(user));
+    dispatch(setNotification({ success: 'Доступ разрешен' }));
+    dispatch({ type: 'SET_ABOUT_DATA', todos });
   } catch (error) {
     // Utils.forbiddenRedirect(res, '/');
     dispatch(setNotification(error.response.data));
@@ -104,13 +104,13 @@ export const loadAboutData = (req, res) => async (dispatch) => {
 // id - берется из урла
 export const loadProfileData = (req, res, id) => async (dispatch) => {
   try {
-    const response = await axios.post(`${domain}/pages/profile`, { id: Number(id) }, { headers: Utils.setAuthToken(req) });
+    const response = await axios.post(`${domain}/pages/profile`, { id }, { headers: Utils.setAuthData(req) });
     const { user, profile } = response.data;
 
     dispatch(setUser(user));
     dispatch({ type: 'SET_PROFILE_DATA', profile });
   } catch (error) {
-    Utils.forbiddenRedirect(res, '/');
+    // Utils.forbiddenRedirect(res, '/');
     dispatch(setNotification(error.response.data));
   }
 };
@@ -129,7 +129,7 @@ export const toSignIn = data => dispatch => {
 
       Utils.setCookieToken(token);
       Utils.setCookieUserID(user.id);
-      Utils.redirect(`/profile/${id}`);
+      // Utils.redirect(`/profile/${id}`);
       dispatch(setUser(user));
       dispatch(setNotification({ success: 'Вход произошел успешно' }));
     })
@@ -152,7 +152,7 @@ export const toSignUp = data => dispatch => {
 
       Utils.setCookieToken(token);
       Utils.setCookieUserID(user.id);
-      Utils.redirect(`/profile/${id}`);
+      // Utils.redirect(`/profile/${id}`);
       dispatch(setNotification({ success: 'Регистрация прошла успешно' }));
       dispatch(setUser(user));
     })
@@ -163,7 +163,7 @@ export const toSignUp = data => dispatch => {
 
 export const toSignOut = id => dispatch => {
   Utils.removeCookieToken();
-  Utils.redirect('/');
+  // Utils.redirect('/');
   dispatch(setUser(null));
 };
 

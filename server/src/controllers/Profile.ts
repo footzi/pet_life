@@ -1,9 +1,23 @@
 import { Request, Response } from 'express';
 import ProfileModel from '../models/Profile';
-import { errorMessage } from '../utils';
+import { errorMessage, checkTypeValue } from '../utils';
+// import { , errorMessage, errorTypeMessage } from '../utils';
 
 export default class ProfileController {
   public static async getProfile(req: Request, res: Response): Promise<void> {
+    const requestId = Number(req.body.id);
+    const tokenId = res.locals.user.id;
+    const checkTypeId = checkTypeValue(requestId, 'number') && checkTypeValue(tokenId, 'number');
+    const checkValidId = requestId === checkTypeId;
+
+    console.log(checkValidId);
+
+    if (!checkTypeValue(req.body.name, 'string') || !checkTypeValue(req.body.password, 'string')) {
+      const err = new Error('Oт клиента получены неверные данные');
+      res.status(403).send(errorMessage(err));
+      return;
+    }
+
     try {
       const profile = await ProfileModel.getProfile(req.body.id);
       const { name, surname, createDate } = profile;

@@ -36,13 +36,13 @@ export default class Utils {
   }
 
   /**
-   * Устанавливает токен авторизации взависимости от рендера на SSR или клиенте
+   * Устанавливает данные для авторизации взависимости от рендера на SSR или клиенте
    * @param {Object} req - объект запроса на сервер. Существует только при SSR.
    * @returns {Object} заголовок авторизации
    */
-  static setAuthToken(req) {
-    const token = req ? req.cookies.token : cookies.get('token');
-    return { Authorization: `Bearer ${token}`, Cookie: '122=value'};
+  static setAuthData(req) {
+    const token = req ? req.cookies.token : this.getCookie('token');
+    return { Authorization: `Bearer ${token}` };
   }
 
   /**
