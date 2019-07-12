@@ -5,14 +5,6 @@ import { connect } from 'react-redux';
 import { loadHomeData } from 'store';
 import './index.scss';
 
-const mapStateToProps = (state) => {
-  const data = state.pages.home;
-
-  return {
-    users: data,
-  };
-};
-
 const Index = () => (
   <div className="index">
     <Head title="Вход"/>
@@ -26,4 +18,4 @@ Index.getInitialProps = async ({ store, req }) => {
   await store.dispatch(loadHomeData(req));
 };
 
-export default connect(mapStateToProps)(Index);
+export default connect()(Index);

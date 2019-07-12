@@ -1,51 +1,68 @@
 import './SignIn.scss';
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { toSignIn } from 'store';
 import { connect } from 'react-redux';
-import { compose, withState, withHandlers } from 'recompose';
+import PropTypes from 'prop-types';
 
 const mapDispatchToProps = dispatch => ({
-  signIn: (body) => dispatch(toSignIn(body)),
+  signIn: body => dispatch(toSignIn(body))
 });
 
-const enhance = compose(
-  connect(
-    null,
-    mapDispatchToProps
-  ),
-  withState('state', 'setState', { name: '', password: '' }),
-  withHandlers({
-    onSubmit: ({ signIn, state }) => (event) => {
-      event.preventDefault();
-      signIn(state);
-    },
-    onInput: ({ setState, state }) => (event) => {
-      const { name, value } = event.currentTarget;
+const SignIn = ({ signIn }) => {
+  const inputName = useRef();
+  const inputPassword = useRef();
 
-      setState({
-        ...state,
-        [name]: value
-      });
-    }
-  })
-);
+  const [name, setName] = useState();
+  const [password, setPassword] = useState('');
 
-const SignIn = enhance(({ onInput, onSubmit }) => (
-  <form className="sign-in" onSubmit={onSubmit}>
-    <h3>Вход</h3>
+  const submit = event => {
+    event.preventDefault();
+    signIn({ name, password });
+  };
 
-    <div className="sign-in__group">
-      <label id="name">Введите имя:</label>
-      <input type="text" name="name" autoComplete="off" onChange={onInput} required/>
-    </div>
+  useEffect(() => {
+    setName(inputName.current.value);
+    setPassword(inputPassword.current.value);
+  });
 
-    <div className="sign-in__group">
-      <label id="password">Введите пароль:</label>
-      <input type="password" name="password" autoComplete="off" onChange={onInput} required/>
-    </div>
+  return (
+    <form className="sign-in" onSubmit={submit}>
+      <h3>Вход</h3>
 
-    <button type="submit">Войти</button>
-  </form>
-));
+      <div className="sign-in__group">
+        <label id="name">Введите имя:</label>
+        <input
+          type="text"
+          name="name"
+          autoComplete="on"
+          ref={inputName}
+          onChange={e => setName(e.target.value)}
+          required
+        />
+      </div>
 
-export default SignIn;
+      <div className="sign-in__group">
+        <label id="password">Введите пароль:</label>
+        <input
+          type="password"
+          name="password"
+          autoComplete="on"
+          ref={inputPassword}
+          onChange={e => setPassword(e.target.value)}
+          required
+        />
+      </div>
+
+      <button type="submit">Войти</button>
+    </form>
+  );
+};
+
+SignIn.propTypes = {
+  signIn: PropTypes.func.isRequired
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(SignIn);

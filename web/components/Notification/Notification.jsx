@@ -1,37 +1,38 @@
 import React from 'react';
 import './Notification.scss';
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import { setNotification } from 'store';
+import PropTypes from 'prop-types';
 
-const mapStateToProps = (state) => ({
-  notification: state.notification,
+const mapStateToProps = state => ({
+  notification: state.notification
 });
 
 const mapDispatchToProps = dispatch => ({
-  onClose: () => dispatch(setNotification('')),
+  onClose: () => dispatch(setNotification(''))
 });
 
-const enhance = compose(
-  connect(mapStateToProps, mapDispatchToProps)
+const Notification = ({ notification, onClose }) => (
+  <div className={`notification ${notification ? 'is-open' : ''}`}>
+    {notification.success && <div className="notification__success">{notification.success}</div>}
+
+    {notification.error && <div className="notification__error">{notification.error.message}</div>}
+
+    <button className="notification__button" onClick={onClose}>
+      Закрыть
+    </button>
+  </div>
 );
 
-const Notification = enhance(({ notification, onClose }) => (
-  <div className={`notification ${notification ? 'is-open' : ''}`}>
-    {notification.success && (
-      <div className='notification__success'>
-        {notification.success}
-      </div>
-    )}
+Notification.propTypes = {
+  notification: PropTypes.string || PropTypes.shape({
+    success: PropTypes.object,
+    error: PropTypes.object,
+  }),
+  onClose: PropTypes.func.isRequired
+};
 
-    {notification.error && (
-      <div className='notification__error'>
-        {notification.error.message}
-      </div>
-    )}
-
-    <button className='notification__button' onClick={onClose}>Закрыть</button>
-  </div>
-));
-
-export default Notification;
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Notification);
