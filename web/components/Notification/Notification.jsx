@@ -2,6 +2,7 @@ import React from 'react';
 import './Notification.scss';
 import { connect } from 'react-redux';
 import { setNotification } from 'store';
+import { isEmptyObject } from 'helpers';
 import PropTypes from 'prop-types';
 
 const mapStateToProps = state => ({
@@ -9,11 +10,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onClose: () => dispatch(setNotification(''))
+  onClose: () => dispatch(setNotification({}))
 });
 
 const Notification = ({ notification, onClose }) => (
-  <div className={`notification ${notification ? 'is-open' : ''}`}>
+  <div className={`notification ${isEmptyObject(notification) ? '' : 'is-open'}`}>
     {notification.success && <div className="notification__success">{notification.success}</div>}
 
     {notification.error && <div className="notification__error">{notification.error.message}</div>}
@@ -25,8 +26,8 @@ const Notification = ({ notification, onClose }) => (
 );
 
 Notification.propTypes = {
-  notification: PropTypes.string || PropTypes.shape({
-    success: PropTypes.object,
+  notification: PropTypes.shape({
+    success: PropTypes.string,
     error: PropTypes.object,
   }),
   onClose: PropTypes.func.isRequired

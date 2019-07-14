@@ -7,7 +7,8 @@ module.exports = {
         store: './store',
         web: './web',
         components: './mobile/components',
-        config: './server.config.json'
+        config: './server.config.json',
+        helpers: './helpers'
       }
     }]
   ]

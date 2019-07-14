@@ -1,23 +1,22 @@
 import { Provider } from 'react-redux';
 import React from 'react';
-import { createAppContainer, createStackNavigator } from 'react-navigation';
+import { createAppContainer, createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import Notification from 'components/Notification';
+import store from 'store';
 import Index from './pages/home';
-import store from '../store';
+import About from './pages/about';
 
-const RootStack = createStackNavigator(
-  {
-    Index
-  },
-  {
-    initialRouteName: 'Index'
-  }
-);
+const TabNavigator = createBottomTabNavigator({
+  Home: { screen: Index },
+  About: { screen: About }
+});
 
-const AppContainer = createAppContainer(RootStack);
+const AppContainer = createAppContainer(TabNavigator);
 
 const App = () => (
   <Provider store={store()}>
     <AppContainer />
+    <Notification />
   </Provider>
 );
 

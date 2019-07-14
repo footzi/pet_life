@@ -10,7 +10,8 @@
 			"store": "./store",
 			"web": "./web",
 			"components": "./web/components",
-			"config": "./server.config.json"
+			"config": "./server.config.json",
+			"helpers": "./helpers"
 		}
     }]
   ]

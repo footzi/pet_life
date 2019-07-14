@@ -1,21 +1,15 @@
 import Head from 'components/Head';
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { loadAboutData } from 'store';
 import './about.scss';
-import { compose } from 'recompose';
 
 const mapStateToProps = (state) => ({
   items: state.pages.about
 });
 
-const enhance = compose(
-  connect(
-    mapStateToProps
-  )
-);
-
-const About = enhance(({ items }) => (
+const About = ({ items }) => (
   <div className="about">
     <Head title="О проекте"/>
     <h1>Hello, about page!</h1>
@@ -24,10 +18,14 @@ const About = enhance(({ items }) => (
       {items.map(item => <p key={item.id}>{item.name}</p>)}
     </ul>
   </div>
-));
+);
+
+About.propTypes = {
+  items: PropTypes.array,
+};
 
 About.getInitialProps = async ({ store, req, res }) => {
   await store.dispatch(loadAboutData(req, res));
 };
 
-export default About;
+export default connect(mapStateToProps)(About);

@@ -2,21 +2,21 @@ import axios from 'axios';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { applyMiddleware, createStore } from 'redux';
-import { setCookie, removeCookie, setAuthData, forbiddenRedirect, redirect } from './utils';
+import { setCookie, removeCookie, setAuthData, forbiddenRedirect, redirect, setMobileStorage } from './utils';
 
 const { domain } = require('../server.config');
 
 // начальное состояние
 const initState = {
   pages: {
-    about: [{ id: 2, title: 'Title' }],
+    about: [],
     profile: {}
   },
   user: {
     id: ''
   },
   profile: {},
-  notification: ''
+  notification: {}
 };
 
 // алиасы для экшенов
@@ -30,46 +30,48 @@ export const actionTypes = {
 // редьюсеры
 export const reducer = (state = initState, action) => {
   switch (action.type) {
-  case actionTypes.SET_ABOUT_DATA:
-    return {
-      ...state,
-      pages: {
-        ...state.pages, about: action.todos,
-      },
-    };
-  case actionTypes.SET_PROFILE_DATA:
-    return {
-      ...state,
-      profile: action.profile
-    };
-  case actionTypes.SET_NOTIFICATION:
-    return {
-      ...state,
-      notification: action.data
-    };
-  case actionTypes.SET_USER:
-    return {
-      ...state,
-      user: action.user || { id: false }
-    };
-  default:
-    return state;
+    case actionTypes.SET_ABOUT_DATA:
+      return {
+        ...state,
+        pages: {
+          ...state.pages,
+          about: action.todos
+        }
+      };
+    case actionTypes.SET_PROFILE_DATA:
+      return {
+        ...state,
+        profile: action.profile
+      };
+    case actionTypes.SET_NOTIFICATION:
+      return {
+        ...state,
+        notification: action.data
+      };
+    case actionTypes.SET_USER:
+      return {
+        ...state,
+        user: action.user || { id: false }
+      };
+    default:
+      return state;
   }
 };
 
 // Экшены, возврашают тип, и какой-либо пэйлоад
-export const setNotification = (data) => dispatch => {
+export const setNotification = data => dispatch => {
   dispatch({ type: 'SET_NOTIFICATION', data });
 };
 
-export const setUser = (user) => dispatch => {
+export const setUser = user => dispatch => {
   dispatch({ type: 'SET_USER', user });
 };
 
-export const loadHomeData = (req) => async (dispatch) => {
+export const loadHomeData = req => async dispatch => {
   try {
     const response = await axios.get(`${domain}/pages/home`, {
-      headers: setAuthData(req), withCredentials: true
+      headers: setAuthData(req),
+      withCredentials: true
     });
     const { user } = response.data;
 
@@ -79,10 +81,11 @@ export const loadHomeData = (req) => async (dispatch) => {
   }
 };
 
-export const loadAboutData = (req, res) => async (dispatch) => {
+export const loadAboutData = (req, res) => async dispatch => {
   try {
     const response = await axios.get(`${domain}/pages/about`, {
-      headers: setAuthData(req), withCredentials: true
+      headers: setAuthData(req),
+      withCredentials: true
     });
     const { user, todos } = response.data;
 
@@ -90,17 +93,23 @@ export const loadAboutData = (req, res) => async (dispatch) => {
     dispatch(setNotification({ success: 'Доступ разрешен' }));
     dispatch({ type: 'SET_ABOUT_DATA', todos });
   } catch (error) {
-    forbiddenRedirect(res, '/');
+    console.error(error);
+    // forbiddenRedirect(res, '/');
     dispatch(setNotification(error.response.data));
   }
 };
 
 // id - берется из урла
-export const loadProfileData = (req, res, id) => async (dispatch) => {
+export const loadProfileData = (req, res, id) => async dispatch => {
   try {
-    const response = await axios.post(`${domain}/pages/profile`, { id }, {
-      headers: setAuthData(req), withCredentials: true
-    });
+    const response = await axios.post(
+      `${domain}/pages/profile`,
+      { id },
+      {
+        headers: setAuthData(req),
+        withCredentials: true
+      }
+    );
     const { user, profile } = response.data;
 
     dispatch(setUser(user));
@@ -111,24 +120,29 @@ export const loadProfileData = (req, res, id) => async (dispatch) => {
   }
 };
 
-export const toSignIn = data => dispatch => {
+export const toSignIn = ({ data, setToken }) => dispatch => {
   const formData = new FormData();
+  console.log('signin')
 
   for (const prop of Object.keys(data)) {
     formData.append(prop, data[prop]);
   }
 
-  axios.post(`${domain}/api/signin`, formData)
-    .then((response) => {
+  axios
+    .post(`${domain}/api/signin`, formData)
+    .then(response => {
       const { user } = response.data;
       const { token, id } = user;
 
-      setCookie('token', token);
-      redirect(`/profile/${id}`);
+      setToken(token);
+
+      // setCookie('token', token);
+      // redirect(`/profile/${id}`);
       dispatch(setUser(user));
       dispatch(setNotification({ success: 'Вход произошел успешно' }));
     })
-    .catch((error) => {
+    .catch(error => {
+      console.log(error.response);
       dispatch(setNotification(error.response.data));
     });
 };
@@ -140,8 +154,9 @@ export const toSignUp = data => dispatch => {
     formData.append(prop, data[prop]);
   }
 
-  axios.post(`${domain}/api/signup`, formData)
-    .then((response) => {
+  axios
+    .post(`${domain}/api/signup`, formData)
+    .then(response => {
       const { user } = response.data;
       const { token, id } = user;
 
@@ -150,7 +165,7 @@ export const toSignUp = data => dispatch => {
       dispatch(setNotification({ success: 'Регистрация прошла успешно' }));
       dispatch(setUser(user));
     })
-    .catch((error) => {
+    .catch(error => {
       dispatch(setNotification(error.response.data));
     });
 };

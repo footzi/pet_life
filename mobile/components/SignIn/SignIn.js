@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import { Button, View, TextInput, StyleSheet } from 'react-native';
-import { toSignIn } from 'store';
-import { connect } from 'react-redux';
+import Api from '../../api';
 import PropTypes from 'prop-types';
-
-const mapDispatchToProps = dispatch => ({
-  signIn: body => dispatch(toSignIn(body))
-});
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -20,12 +15,12 @@ const styles = StyleSheet.create({
   }
 });
 
-const SignIn = ({ signIn }) => {
+const SignIn = () => {
   const [name, setName] = useState();
   const [password, setPassword] = useState('');
 
   const submit = () => {
-    signIn({ name, password });
+    Api.signIn({ data: { name, password } });
   };
   return (
     <View style={styles.wrapper}>
@@ -40,7 +35,4 @@ SignIn.propTypes = {
   signIn: PropTypes.func.isRequired
 };
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(SignIn);
+export default SignIn;
