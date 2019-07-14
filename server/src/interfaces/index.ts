@@ -16,6 +16,12 @@ export interface IFormLogin {
     password: string;
 }
 
+export interface IFormCheckIn {
+    name: string;
+    surname?: string;
+    password: string;
+}
+
 export interface IErrorMessage {
     error: {
         message: string;

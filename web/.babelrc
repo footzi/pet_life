@@ -11,7 +11,8 @@
 			"web": "./web",
 			"components": "./web/components",
 			"config": "./server.config.json",
-			"helpers": "./helpers"
+			"helpers": "./helpers",
+			"api": "./web/api"
 		}
     }]
   ]

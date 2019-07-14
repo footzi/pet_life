@@ -1,9 +1,9 @@
+import './index.scss';
 import Head from 'components/Head';
 import SignIn from 'components/SignIn';
 import React from 'react';
 import { connect } from 'react-redux';
-import { loadHomeData } from 'store';
-import './index.scss';
+import Api from 'api';
 
 const Index = () => (
   <div className="index">
@@ -15,7 +15,7 @@ const Index = () => (
 );
 
 Index.getInitialProps = async ({ store, req }) => {
-  await store.dispatch(loadHomeData(req));
+  await store.dispatch(Api.getHomeData(req ));
 };
 
 export default connect()(Index);

@@ -2,24 +2,18 @@ import './Navigation.scss';
 import { Link } from 'web/routes';
 import React from 'react';
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import SignOut from '../SignOut';
+import PropTypes from 'prop-types';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   user: state.user
 });
 
-const enhance = compose(
-  connect(
-    mapStateToProps
-  )
-);
-
-const Navigation = enhance(({ user }) => (
+const Navigation = ({ user }) => (
   <nav className="navigation">
     {user.id && (
       <>
-      <SignOut id={user.id} />
+        <SignOut />
         <Link route={`/profile/${user.id}`}>
           <a>Профиль № {user.id}</a>
         </Link>
@@ -39,6 +33,12 @@ const Navigation = enhance(({ user }) => (
       <a>О проекте (private)</a>
     </Link>
   </nav>
-));
+);
 
-export default Navigation;
+Navigation.propTypes = {
+  user: PropTypes.shape({
+    id: PropTypes.number
+  })
+};
+
+export default connect(mapStateToProps)(Navigation);

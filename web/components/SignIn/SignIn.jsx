@@ -1,28 +1,23 @@
 import './SignIn.scss';
 import React, { useState, useRef, useEffect } from 'react';
-import Api from '../../api';
+import Api from 'api';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { setCookie } from 'store/utils';
 
 const mapDispatchToProps = dispatch => ({
   signIn: body => dispatch(Api.signIn(body))
 });
-
-const setToken = token => {
-  setCookie('token', token);
-};
 
 const SignIn = ({ signIn }) => {
   const inputName = useRef();
   const inputPassword = useRef();
 
   const [name, setName] = useState();
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState();
 
   const submit = event => {
     event.preventDefault();
-    signIn({ data: { name, password }, setToken });
+    signIn({ name, password });
   };
 
   useEffect(() => {
@@ -36,7 +31,14 @@ const SignIn = ({ signIn }) => {
 
       <div className="sign-in__group">
         <label id="name">Введите имя:</label>
-        <input type="text" name="name" autoComplete="on" ref={inputName} onChange={e => setName(e.target.value)} required />
+        <input
+          type="text"
+          name="name"
+          autoComplete="on"
+          ref={inputName}
+          onChange={e => setName(e.target.value)}
+          required
+        />
       </div>
 
       <div className="sign-in__group">

@@ -1,20 +1,13 @@
 import React from 'react';
-import { compose } from 'recompose';
 import { connect } from 'react-redux';
-import { loadProfileData } from 'store';
+import PropTypes from 'prop-types';
+import Api from 'api';
 
 const mapStateToProps = (state) => ({
   profile: state.profile
 });
 
-
-const enhance = compose(
-  connect(
-    mapStateToProps
-  )
-);
-
-const Profile = enhance(({ profile }) => (
+const Profile = ({ profile }) => (
   <>
     <h1>Профиль</h1>
     <ul>
@@ -24,10 +17,19 @@ const Profile = enhance(({ profile }) => (
       <li>Создан - <b>{profile.createDate}</b></li>
     </ul>
   </>
-));
+);
 
-Profile.getInitialProps = async ({ store, req, res, query }) => {
-  await store.dispatch(loadProfileData(req, res, query.id));
+Profile.getInitialProps = async ({ store, res, req, query }) => {
+  await store.dispatch(Api.getProfileData(res, req, query.id));
 };
 
-export default Profile;
+Profile.propTypes = {
+  profile: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    surname: PropTypes.string,
+    createDate: PropTypes.string.isRequired,
+  })
+};
+
+export default connect(mapStateToProps)(Profile);

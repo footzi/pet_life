@@ -1,66 +1,62 @@
 import './SignUp.scss';
-import React from 'react';
-import { toSignUp } from 'store';
+import React, { useState } from 'react';
+import Api from 'api';
 import { connect } from 'react-redux';
-import { compose, withState, withHandlers } from 'recompose';
+import PropTypes from 'prop-types';
 
 const mapDispatchToProps = dispatch => ({
-  signUp: (body) => dispatch(toSignUp(body)),
+  signUp: body => dispatch(Api.signUp(body))
 });
 
-const enhance = compose(
-  connect(
-    null,
-    mapDispatchToProps
-  ),
-  withState('state', 'setState', { name: '', password: '' }),
-  withHandlers({
-    onSubmit: ({ signUp, state }) => (event) => {
-      event.preventDefault();
-      signUp(state);
-    },
-    onInput: ({ setState, state }) => (event) => {
-      const { name, value } = event.currentTarget;
+const SignUp = ({ signUp }) => {
+  const [name, setName] = useState();
+  const [surname, setSurname] = useState();
+  const [password, setPassword] = useState();
 
-      setState({
-        ...state,
-        [name]: value
-      });
-    }
-  })
-);
+  const submit = event => {
+    event.preventDefault();
+    signUp({ name, surname, password });
+  };
 
-const SignUp = enhance(({ onInput, onSubmit }) => (
-  <form className="sign-up" onSubmit={onSubmit}>
-    <h3>Вход</h3>
+  return (
+    <form className="sign-up" onSubmit={submit}>
+      <h3>Вход</h3>
 
-    <div className="sign-up__group">
-      <label>Введите имя:
-        <input type="text" name="name" autoComplete="off" onChange={onInput} required/>
-      </label>
-    </div>
+      <div className="sign-up__group">
+        <label>
+          Введите имя:
+          <input type="text" name="name" autoComplete="off" onChange={e => setName(e.target.value)} required />
+        </label>
+      </div>
 
-    <div className="sign-up__group">
-      <label>Введите фамилию:
-        <input type="text" name="surname" autoComplete="off" onChange={onInput}/>
-      </label>
-    </div>
+      <div className="sign-up__group">
+        <label>
+          Введите фамилию:
+          <input type="text" name="surname" autoComplete="off" onChange={e => setSurname(e.target.value)} />
+        </label>
+      </div>
 
-    <div className="sign-up__group">
-      <label>Введите пароль:
-        <input type="password" name="password" autoComplete="off" onChange={onInput}/>
-      </label>
-    </div>
+      <div className="sign-up__group">
+        <label>
+          Введите пароль:
+          <input type="password" name="password" autoComplete="off" onChange={e => setPassword(e.target.value)} />
+        </label>
+      </div>
 
-    <div className="sign-up__group">
-      <label>
-        <input type="checkbox" required/>
-        Подтверждаю
-      </label>
-    </div>
+      <div className="sign-up__group">
+        <label>
+          <input type="checkbox" required />
+          Подтверждаю
+        </label>
+      </div>
 
-    <button type="submit">Регистрация</button>
-  </form>
-));
+      <button type="submit">Регистрация</button>
+    </form>
+  );
+};
 
-export default SignUp;
+SignUp.propTypes = {
+  signUp: PropTypes.func.isRequired
+};
+
+export default connect(null, mapDispatchToProps)(SignUp);

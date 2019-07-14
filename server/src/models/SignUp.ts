@@ -1,10 +1,10 @@
 import { getRepository } from 'typeorm';
 import User from '../entities/User';
-import { IUser, IFormLogin } from '../interfaces';
+import { IUser, IFormCheckIn } from '../interfaces';
 
 export default class SignUpModel {
   // Регистрация пользователя
-  public static async signUp(body: IFormLogin): Promise<IUser> {
+  public static async signUp(body: IFormCheckIn): Promise<IUser> {
     const user = new User();
 
     const checkUser = await getRepository(User)

@@ -2,7 +2,7 @@ import Head from 'components/Head';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { loadAboutData } from 'store';
+import Api from 'api';
 import './about.scss';
 
 const mapStateToProps = (state) => ({
@@ -24,8 +24,8 @@ About.propTypes = {
   items: PropTypes.array,
 };
 
-About.getInitialProps = async ({ store, req, res }) => {
-  await store.dispatch(loadAboutData(req, res));
+About.getInitialProps = async ({ store, res, req }) => {
+  await store.dispatch(Api.getAboutData(res, req));
 };
 
 export default connect(mapStateToProps)(About);

@@ -1,22 +1,19 @@
 import './SignOut.scss';
 import React from 'react';
-import { toSignOut } from 'store';
+import Api from 'api';
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
+import PropTypes from 'prop-types';
 
 const mapDispatchToProps = dispatch => ({
-  signOut: (id) => dispatch(toSignOut(id)),
+  signOut: () => dispatch(Api.signOut()),
 });
 
-const enhance = compose(
-  connect(
-    null,
-    mapDispatchToProps
-  ),
+const SignOut = ({ signOut }) => (
+  <button className="SignOut" onClick={signOut}>Выход</button>
 );
 
-const SignOut = enhance(({ id, signOut }) => (
-  <button className="SignOut" onClick={() => { signOut(id); }}>Выход</button>
-));
+SignOut.propTypes = {
+  signOut: PropTypes.func.isRequired
+};
 
-export default SignOut;
+export default connect(null, mapDispatchToProps)(SignOut);
