@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage';
-import { SignIn } from 'store';
+import { toSignIn } from 'store';
 
 export default class Api {
   static setToken(token) {
@@ -10,7 +10,26 @@ export default class Api {
     AsyncStorage.getItem('token');
   }
 
-  static signIn(data) {
-    SignIn({data, setToken: this.setToken})
+  static signIn(body) {
+    const setToken = Api.setToken;
+    toSignIn({ body, setToken })
+  }
+
+  static getProfileData(res, req, id) {
+    // const redirect = () => Api.forbiddenRedirect(res, '/')
+    // const settings = {
+    //   headers: Api.setAuthData(req),
+    //   withCredentials: true
+    // }
+    // return loadProfileData({ settings, id, redirect})
+  }
+
+  static getAboutData(res, req) {
+    // const redirect = () => Api.forbiddenRedirect(res, '/')
+    // const settings = {
+    //   headers: Api.setAuthData(req),
+    //   withCredentials: true
+    // }
+    // return loadAboutData({ settings, redirect })
   }
 }

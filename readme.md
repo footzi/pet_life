@@ -2,6 +2,9 @@ adb devices
 adb shell input keyevent 82
 adb -s XEDDU18202029736 reverse tcp:8081 tcp:8081
 react-native start --reset-cache
+react-native run-android
+
+Loading dependency graph done - открыть приложение на телефоне
 
 expo r -c --config ./mobile/app.json
 

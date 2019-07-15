@@ -8,7 +8,8 @@ module.exports = {
         web: './web',
         components: './mobile/components',
         config: './server.config.json',
-        helpers: './helpers'
+        helpers: './helpers',
+        api: './mobile/api',
       }
     }]
   ]

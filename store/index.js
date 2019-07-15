@@ -107,7 +107,7 @@ export const loadProfileData = ({ settings, id, redirect }) => async dispatch =>
   }
 };
 
-export const toSignIn = ({ body, setToken, redirect }) => dispatch => {
+export const toSignIn = ({ body, setToken, redirect =()=>{} }) => dispatch => {
   const formData = new FormData();
 
   for (const prop of Object.keys(body)) {
@@ -119,6 +119,8 @@ export const toSignIn = ({ body, setToken, redirect }) => dispatch => {
     .then(response => {
       const { user } = response.data;
       const { token, id } = user;
+
+      console.log(user)
 
       setToken(token);
       redirect(id);

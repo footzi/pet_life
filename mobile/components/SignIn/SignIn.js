@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, View, TextInput, StyleSheet } from 'react-native';
-import Api from '../../api';
+import Api from 'api';
 import PropTypes from 'prop-types';
 
 const styles = StyleSheet.create({
@@ -20,7 +20,7 @@ const SignIn = () => {
   const [password, setPassword] = useState('');
 
   const submit = () => {
-    Api.signIn({ data: { name, password } });
+    Api.signIn({ body: { name, password } });
   };
   return (
     <View style={styles.wrapper}>
