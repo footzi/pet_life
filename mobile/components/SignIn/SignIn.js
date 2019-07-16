@@ -22,6 +22,7 @@ const SignIn = () => {
   const submit = () => {
     Api.signIn({ body: { name, password } });
   };
+
   return (
     <View style={styles.wrapper}>
       <TextInput style={styles.input} placeholder="Имя" onChangeText={value => setName(value)} />
