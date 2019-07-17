@@ -3,7 +3,8 @@ adb shell input keyevent 82
 adb -s XEDDU18202029736 reverse tcp:8081 tcp:8081
 react-native start --reset-cache
 react-native run-android
-react-native run-android --reset-cache--no-jetifier
+react-native run-android --no-jetifier
+react-native clean-project-auto - только в bash
 
 Loading dependency graph done - открыть приложение на телефоне
 

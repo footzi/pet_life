@@ -391,6 +391,8 @@
 				2D02E4C71E0B4AEC006451C7 /* libRCTText-tvOS.a in Frameworks */,
 				2D02E4C81E0B4AEC006451C7 /* libRCTWebSocket-tvOS.a in Frameworks */,
 				FA02A2BE5E52469DA4E78DE2 /* libRNGestureHandler-tvOS.a in Frameworks */,
+				73928C35984D46B3B98D989F /* libRNGestureHandler-tvOS.a in Frameworks */,
+				06E1CF3B3A4A4824B16E6F6A /* libRNGestureHandler-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

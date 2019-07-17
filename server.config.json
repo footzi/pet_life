@@ -4,9 +4,9 @@
     "api": 8080
   },
   "host": {
-    "api": "192.168.0.106"
+    "api": "localhost"
   },
-  "domain": "http://192.168.0.106:8080",
+  "domain": "https://native-pet-life.herokuapp.com",
   "static": "C:\\projects\\pet_life",
   "database": {
     "type": "mysql",
@@ -17,7 +17,7 @@
     "database": "heroku_4d4d87bbe77a652",
     "synchronize": true,
     "entities": [
-      "./server/src/entities/*.ts"
+      "./server/build/entities/*.js"
     ]
   },
   "secret": "jwt-secret"
