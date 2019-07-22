@@ -66,6 +66,15 @@ export const setUser = user => dispatch => {
   dispatch({ type: 'SET_USER', user });
 };
 
+export const refreshTokens = ({ settings, setToken }) => async dispatch => {
+  try {
+    const response = await axios.get(`${domain}/api/refresh`, settings);
+  } catch (error) {
+    console.error(error);
+    dispatch(setNotification(error.response.data));
+  }
+};
+
 export const loadHomeData = ({ settings }) => async dispatch => {
   try {
     const response = await axios.get(`${domain}/pages/home`, settings);
@@ -73,7 +82,7 @@ export const loadHomeData = ({ settings }) => async dispatch => {
 
     dispatch(setUser(user));
   } catch (error) {
-    console.error(`При получении данных для главной страницы произошла ошибка: ${error}`);
+    console.error(error);
   }
 };
 
@@ -107,7 +116,7 @@ export const loadProfileData = ({ settings, id, redirect }) => async dispatch =>
   }
 };
 
-export const toSignIn = ({ body, setToken, redirect =()=>{} }) => dispatch => {
+export const toSignIn = ({ body, setToken, redirect }) => dispatch => {
   const formData = new FormData();
 
   for (const prop of Object.keys(body)) {
@@ -118,11 +127,9 @@ export const toSignIn = ({ body, setToken, redirect =()=>{} }) => dispatch => {
     .post(`${domain}/api/signin`, formData)
     .then(response => {
       const { user } = response.data;
-      const { token, id } = user;
+      const { access_token, refresh_token, id } = user;
 
-      console.log(user)
-
-      setToken(token);
+      setToken(access_token, refresh_token);
       redirect(id);
       dispatch(setUser(user));
       dispatch(setNotification({ success: 'Вход произошел успешно' }));
@@ -144,9 +151,9 @@ export const toSignUp = ({ body, setToken, redirect }) => dispatch => {
     .post(`${domain}/api/signup`, formData)
     .then(response => {
       const { user } = response.data;
-      const { token, id } = user;
+      const { access_token, refresh_token, id } = user;
 
-      setToken(token);
+      setToken(access_token, refresh_token);
       redirect(id);
       dispatch(setNotification({ success: 'Регистрация прошла успешно' }));
       dispatch(setUser(user));

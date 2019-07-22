@@ -4,6 +4,7 @@ import passport from 'passport';
 import passportLocal from 'passport-local';
 import jwt from 'jsonwebtoken';
 import SignInModel from '../models/SignIn';
+import TokenModel from '../models/Token';
 import { checkTypeValue, errorMessage, errorTypeMessage } from '../utils';
 
 const SECRET = require('../../../server.config.json').secret;
@@ -68,11 +69,19 @@ export default class SignInController {
         return;
       }
 
-      const payload = { username: user.name, password: user.password };
-      const token = jwt.sign(payload, SECRET);
-      const response = { id: user.id, token };
+      try {
+        const access = { username: user.name, password: user.password };
+        const refresh = { id: user.id }
+        const access_token = jwt.sign(access, SECRET, { expiresIn: '120' });
+        const refresh_token = jwt.sign(refresh, SECRET, { expiresIn: '30d' });
+        const response = { id: user.id, access_token, refresh_token};
 
-      res.send({ user: response });
+        TokenModel.save({ userId: user.id, refresh: refresh_token});
+
+        res.send({ user: response });
+      } catch {
+        res.status(500).send(errorMessage(err));
+      }
     })(req, res);
   }
 }

@@ -1,5 +1,5 @@
 export interface IUser {
-    id?: number;
+    id: number;
     name: string;
     surname: string;
     createDate: string;
@@ -32,4 +32,9 @@ export interface IErrorMessage {
 export interface IErrorTypeMessage {
     type: string;
     content: Error;
+}
+
+export interface IToken {
+    userId: number;
+    refresh: string;
 }

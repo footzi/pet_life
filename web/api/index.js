@@ -1,14 +1,19 @@
-import { toSignIn, toSignUp, toSignOut, loadHomeData, loadProfileData, loadAboutData} from 'store';
+import { toSignIn, toSignUp, toSignOut, loadHomeData, loadProfileData, loadAboutData, refreshTokens} from 'store';
 import { setCookie, removeCookie, getCookie } from 'store/utils';
 import Router from 'next/router';
+import jwt from 'jsonwebtoken';
+
+const SECRET = require('../../server.config.json').secret;
 
 export default class Api {
-  static setToken(token) {
-    setCookie('token', token);
+  static setToken(access_token, refresh_token) {
+    setCookie('access_token', access_token);
+    setCookie('refresh_token', refresh_token);
   }
 
   static removeToken() {
-    removeCookie('token');
+    removeCookie('access_token');
+    removeCookie('refresh_token');
   }
 
   static getToken() {
@@ -33,6 +38,27 @@ export default class Api {
   static setAuthData(req) {
     const token = req ? req.cookies.token : getCookie('token');
     return { Authorization: `Bearer ${token}` };
+  }
+
+  static checkAccessToken() {
+    const access_token = getCookie('access_token');
+    const refresh_token = getCookie('refresh_token');
+
+    jwt.verify(access_token, SECRET, (err) => {
+      if (err) {
+        // !!! в заголоках передавать оба токена!
+        const settings = {
+          headers: Api.setAuthData(req),
+          withCredentials: true
+        }
+        refreshTokens({ access_token, refresh_token, setToken});
+      }
+    })
+  }
+
+  static getRefreshTokens() {
+    
+    return refreshTokens();
   }
 
   static signIn(body) {
@@ -74,6 +100,8 @@ export default class Api {
   }
 
   static getAboutData(res, req) {
+    Api.checkAccessToken();
+
     const redirect = () => Api.forbiddenRedirect(res, '/')
     const settings = {
       headers: Api.setAuthData(req),
