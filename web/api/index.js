@@ -35,30 +35,25 @@ export default class Api {
     }
   }
 
-  static setAuthData(req) {
-    const token = req ? req.cookies.token : getCookie('token');
-    return { Authorization: `Bearer ${token}` };
+  static setAuthData(req, refresh = false) {
+    const key = refresh ? 'refresh_token' : 'access_token';
+    const token = req ? req.cookies[key] : getCookie(key);
+
+    return { Authorization: `Bearer ${token}`};
   }
 
   static checkAccessToken() {
     const access_token = getCookie('access_token');
-    const refresh_token = getCookie('refresh_token');
 
     jwt.verify(access_token, SECRET, (err) => {
       if (err) {
-        // !!! в заголоках передавать оба токена!
         const settings = {
-          headers: Api.setAuthData(req),
+          headers: Api.setAuthData(req, true),
           withCredentials: true
         }
-        refreshTokens({ access_token, refresh_token, setToken});
+        refreshTokens({ settings, setToken});
       }
     })
-  }
-
-  static getRefreshTokens() {
-    
-    return refreshTokens();
   }
 
   static signIn(body) {

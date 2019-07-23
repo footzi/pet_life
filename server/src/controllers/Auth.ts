@@ -2,11 +2,10 @@ import { Request, Response } from 'express';
 import passport from 'passport';
 import passportJwt from 'passport-jwt';
 import SignInModel from '../models/SignIn';
-import { IPayloadJWT, IErrorTypeMessage } from '../interfaces';
+import { IPayloadAccessToken, IErrorTypeMessage } from '../interfaces';
 import { errorMessage, errorTypeMessage } from '../utils';
 
 const SECRET = require('../../../server.config.json').secret;
-
 const { ExtractJwt } = passportJwt;
 const JwtStrategy = passportJwt.Strategy;
 
@@ -19,12 +18,10 @@ export default class AuthController {
     };
 
     passport.use('jwt', new JwtStrategy(options,
-      async (payload: IPayloadJWT, done: Function): Promise<void> => {
+      async (payload: IPayloadAccessToken, done: Function): Promise<void> => {
         try {
           const user = await SignInModel.signIn(payload.username);
 
-          // где-то тут проверка на соответсвтие id из базы и полученного от клиента. Т.к получение данных для
-          // запроса в бд идет из токена
           if (!user) {
             const error = errorTypeMessage('user_undefined', 'Данного пользователя не существует');
             return done(error, false);
@@ -35,7 +32,8 @@ export default class AuthController {
           const error = errorTypeMessage('critical', err);
           return done(error, false);
         }
-      }));
+      }
+    ));
   }
 
   // Проверяет доступен ли пользователю данный маршрут
