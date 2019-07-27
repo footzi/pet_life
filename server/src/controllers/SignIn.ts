@@ -1,36 +1,83 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
-import passport from 'passport';
-import passportLocal from 'passport-local';
 import jwt from 'jsonwebtoken';
 import SignInModel from '../models/SignIn';
 import TokenModel from '../models/Token';
 import { checkTypeValue, errorMessage, errorTypeMessage } from '../utils';
+import randomstring from 'randomstring';
 
-const SECRET = require('../../../server.config.json').secret;
-
-const LocalStrategy = passportLocal.Strategy;
+const CONFIG = require('../../../server.config.json');
 
 export default class SignInController {
-  constructor() {
+  body: {
+    login: string
+    password: string
+  }
+  user: {
+    id: number
+    password: string
+  }
+  tokens: {
+    access: string
+    refresh: string
+  }
 
+  constructor() {
+    this.body = { login: '', password: '' };
+    this.user = { id: 0, password: '' };
+    this.tokens = { access: '', refresh:'' };
   }
 
   public async signIn(req: Request, res: Response) {
+    this.body = req.body;
+
     try {
-      this.checkValue(req);
+      this.checkValue();
+      await this.getUser()
     } catch(error) {
       const code = error.type === 'not_access' ? 403 : 500;
       res.status(code).send(errorMessage(error.content));
     }
   }
 
-  checkValue(req: Request) {
-    const { login, password} = req.body;
-    
+  checkValue() {
+    const { login, password } = this.body;
+
     if (!checkTypeValue(login, 'string') || !checkTypeValue(password, 'string')) {
       throw errorTypeMessage('not_access', 'Oт клиента получены неверные данные')
     }
+  }
+
+  async getUser() {
+    try {
+      const user = await SignInModel.signIn(this.body.login);
+
+      if (!user) {
+        throw errorTypeMessage('not_access', 'Данного пользователя не существует');  
+      }
+
+      this.user.id = user.id;
+      this.user.password = user.password;
+    } catch (error) {
+      throw errorTypeMessage('critical', error);
+    }
+  }
+
+  checkPassword() {
+    const checkPassword = bcrypt.compareSync(this.body.password, this.user.password);
+
+    if (!checkPassword) {
+      throw errorTypeMessage('not_access', 'Неверный пароль')
+    }
+  }
+
+  createTokens() {
+    const access = { id: this.user.id };
+    const refresh = { id: this.user.id, key: randomstring.generate()}
+    this.tokens.access = jwt.sign(access, CONFIG.secret, { expiresIn: CONFIG.expire_access });
+    this.tokens.refresh = jwt.sign(refresh, CONFIG.secret, { expiresIn: CONFIG.expire_refresh });
+
+    TokenModel.save({ userId: this.user.id, refresh: this.tokens.refresh});
   }
   // // Стратегия на проверку существование пользователя и правильность пароля
   // private static localStrategy(): void {

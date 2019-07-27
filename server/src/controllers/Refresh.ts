@@ -11,15 +11,16 @@ export default class RefreshController {
   refresh_token: string
   payload: IPayloadRefreshToken
   user: IToken
-  new_access_token: string
-  new_refresh_token: string
+  newtokens: {
+    access: string
+    refresh: string
+  }
 
   constructor() {
     this.refresh_token = '';
     this.user = { userId: 0, refresh: '' };
     this.payload = { id:0 };
-    this.new_access_token = '';
-    this.new_refresh_token = '';
+    this.newtokens = { access: '', refresh: ''};
   }
 
   public async refresh(req: Request, res: Response) {
@@ -30,7 +31,7 @@ export default class RefreshController {
       this.compareTokens();
       await this.createTokens();
 
-      const response = { access_token: this.new_access_token, refresh_token: this.new_refresh_token};
+      const response = { access_token: this.newtokens.access, refresh_token: this.newtokens.refresh};
       res.send({ user: response });
     } catch (error) {
       const code = error.type === 'not_access' ? 403 : 500;
@@ -80,10 +81,10 @@ export default class RefreshController {
   createTokens() {
     const access = { id: this.user.userId };
     const refresh = { id: this.user.userId, key: randomstring.generate()}
-    this.new_access_token = jwt.sign(access, CONFIG.secret, { expiresIn: CONFIG.expire_access });
-    this.new_refresh_token = jwt.sign(refresh, CONFIG.secret, { expiresIn: CONFIG.expire_refresh });
+    this.newtokens.access = jwt.sign(access, CONFIG.secret, { expiresIn: CONFIG.expire_access });
+    this.newtokens.refresh = jwt.sign(refresh, CONFIG.secret, { expiresIn: CONFIG.expire_refresh });
 
-    TokenModel.update(this.user.userId, this.new_refresh_token);
+    TokenModel.update(this.user.userId, this.newtokens.refresh);
   }
 };
 
