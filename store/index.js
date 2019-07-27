@@ -66,15 +66,14 @@ export const setUser = user => dispatch => {
   dispatch({ type: 'SET_USER', user });
 };
 
-export const refreshTokens = ({ settings, setToken }) => async dispatch => {
-  await axios.get(`${domain}/api/refresh`, settings);
-  // try {
-  //   const response = await axios.get(`${domain}/api/refresh`, settings);
-
-  // } catch (error) {
-  //   console.error(error);
-  //   dispatch(setNotification(error.response.data));
-  // }
+export const toRefreshTokens = ({ settings }) => async dispatch => {
+  try {
+    const response = await axios.post(`${domain}/api/refresh`, settings);
+    console.log(response);
+    
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export const loadHomeData = ({ settings }) => async dispatch => {

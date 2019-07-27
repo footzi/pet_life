@@ -19,3 +19,8 @@ export const errorTypeMessage = (type: string, error: string | Error): IErrorTyp
     content
   };
 };
+
+// Парсит строку заголовка авторизации
+export const parseBearer = (header: string) => {
+  return header.replace('Bearer ','');
+}

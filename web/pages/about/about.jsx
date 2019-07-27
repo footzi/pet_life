@@ -25,7 +25,7 @@ About.propTypes = {
 };
 
 About.getInitialProps = async ({ store, res, req }) => {
-  await store.dispatch(Api.getAboutData(res, req));
+  await Api.getAboutData(store, res, req);
 };
 
 export default connect(mapStateToProps)(About);

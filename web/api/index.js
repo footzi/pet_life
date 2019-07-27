@@ -1,7 +1,8 @@
-import { toSignIn, toSignUp, toSignOut, loadHomeData, loadProfileData, loadAboutData, refreshTokens} from 'store';
+import { toSignIn, toSignUp, toSignOut, loadHomeData, loadProfileData, loadAboutData, toRefreshTokens} from 'store';
 import { setCookie, removeCookie, getCookie } from 'store/utils';
 import Router from 'next/router';
 import jwt from 'jsonwebtoken';
+// import store from 'store';
 
 const SECRET = require('../../server.config.json').secret;
 
@@ -42,8 +43,9 @@ export default class Api {
     return { Authorization: `Bearer ${token}`};
   }
 
-  static checkAccessToken() {
+  static async checkAccessToken(store, req) {
     const access_token = getCookie('access_token');
+    const setToken = Api.setToken;
 
     jwt.verify(access_token, SECRET, (err) => {
       if (err) {
@@ -51,7 +53,7 @@ export default class Api {
           headers: Api.setAuthData(req, true),
           withCredentials: true
         }
-        refreshTokens({ settings, setToken});
+        store.dispatch(toRefreshTokens({ settings, setToken }));
       }
     })
   }
@@ -94,14 +96,14 @@ export default class Api {
     return loadProfileData({ settings, id, redirect})
   }
 
-  static getAboutData(res, req) {
-    Api.checkAccessToken();
-
+  static async getAboutData(store, res, req) {
+    // await Api.checkAccessToken(store, req);
     const redirect = () => Api.forbiddenRedirect(res, '/')
     const settings = {
       headers: Api.setAuthData(req),
       withCredentials: true
     }
-    return loadAboutData({ settings, redirect })
+    
+    store.dispatch(loadAboutData({ settings, redirect }));
   }
 }

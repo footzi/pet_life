@@ -1,13 +1,13 @@
 export interface IUser {
   id: number;
-  name: string;
+  login: string;
   surname: string;
   createDate: string;
   password: string;
 }
 
 export interface IPayloadAccessToken {
-  username: string;
+  login: string;
   password: string;
 }
 
@@ -16,20 +16,20 @@ export interface IPayloadRefreshToken {
 }
 
 export interface IFormLogin {
-  name: string;
+  login: string;
   password: string;
 }
 
 export interface IFormCheckIn {
-  name: string;
+  login: string;
   surname?: string;
   password: string;
 }
 
 export interface IErrorMessage {
   error: {
-      message: string;
-      stack: string;
+    message: string;
+    stack: string;
   };
 }
 

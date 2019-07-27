@@ -4,9 +4,9 @@
     "api": 8080
   },
   "host": {
-    "api": "192.168.43.230"
+    "api": "192.168.0.100"
   },
-  "domain": "http://192.168.43.230:8080",
+  "domain": "http://192.168.0.100:8080",
   "static": "C:\\projects\\pet_life",
   "database": {
     "type": "mysql",
@@ -20,5 +20,7 @@
       "./server/src/entities/*.ts"
     ]
   },
-  "secret": "jwt-secret"
+  "secret": "jwt-secret",
+  "expire_access": "120",
+  "expire_refresh": "30d"
 }

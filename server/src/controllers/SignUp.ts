@@ -4,24 +4,25 @@ import { Request, Response } from 'express';
 import SingUpModel from '../models/SignUp';
 import { checkTypeValue, errorMessage } from '../utils';
 import TokenModel from '../models/Token';
+import randomstring from 'randomstring';
 
-const SECRET = require('../../../server.config.json').secret;
+const CONFIG = require('../../../server.config.json');
 
 export default class SignUpController {
   // Регистрация пользователя
   public static async signUp(req: Request, res: Response): Promise<void> {
     try {
-      const { name, surname, password } = req.body;
+      const { login, surname, password } = req.body;
 
-      if (!checkTypeValue(name, 'string') || !checkTypeValue(password, 'string')) {
+      if (!checkTypeValue(login, 'string') || !checkTypeValue(password, 'string')) {
         throw new Error('Oт клиента получены неверные данные ');
       }
       const passwordHash = bcrypt.hashSync(password, 10);
-      const user = await SingUpModel.signUp({ name, surname, password: passwordHash });
-      const access = { username: user.name, password: user.password };
-      const refresh = { id: user.id }
-      const access_token = jwt.sign(access, SECRET, { expiresIn: '120' });
-      const refresh_token = jwt.sign(refresh, SECRET, { expiresIn: '30d' });
+      const user = await SingUpModel.signUp({ login, surname, password: passwordHash });
+      const access = { id: user.id };
+      const refresh = { id: user.id, key: randomstring.generate()}
+      const access_token = jwt.sign(access, CONFIG.secret, { expiresIn: CONFIG.expire_access });
+      const refresh_token = jwt.sign(refresh, CONFIG.secret, { expiresIn: CONFIG.expire_refresh });
       const response = { id: user.id, access_token, refresh_token};
 
       TokenModel.save({ userId: user.id, refresh: refresh_token});

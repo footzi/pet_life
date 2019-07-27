@@ -5,10 +5,12 @@ import SignUpController from '../controllers/SignUp';
 import RefreshController from '../controllers/Refresh';
 
 const router = Router();
+const signInController = new SignInController();
+const refreshController = new RefreshController();
 const upload: multer.Instance = multer();
 
-router.post('/signin', upload.none(), SignInController.signIn);
+router.post('/signin', upload.none(), (req, res) => signInController.signIn(req, res));
 router.post('/signup', upload.none(), SignUpController.signUp);
-router.get('/refresh', RefreshController.refresh);
+router.post('/refresh', (req, res) => refreshController.refresh(req, res));
 
 export default router;

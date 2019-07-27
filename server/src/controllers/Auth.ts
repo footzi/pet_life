@@ -20,10 +20,10 @@ export default class AuthController {
     passport.use('jwt', new JwtStrategy(options,
       async (payload: IPayloadAccessToken, done: Function): Promise<void> => {
         try {
-          const user = await SignInModel.signIn(payload.username);
+          const user = await SignInModel.signIn(payload.login);
 
           if (!user) {
-            const error = errorTypeMessage('user_undefined', 'Данного пользователя не существует');
+            const error = errorTypeMessage('not_access', 'Данного пользователя не существует');
             return done(error, false);
           }
 
@@ -46,7 +46,7 @@ export default class AuthController {
         return;
       }
 
-      if (err && err.type === 'user_undefined') {
+      if (err && err.type === 'not_access') {
         res.status(403).send(errorMessage(err.content));
         return;
       }

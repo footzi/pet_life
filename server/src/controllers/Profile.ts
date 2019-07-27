@@ -18,12 +18,12 @@ export default class ProfileController {
 
     try {
       const profile = await ProfileModel.getProfile(req.body.id);
-      const { id, name, surname, createDate } = profile;
+      const { id, login, surname, createDate } = profile;
       const response = {
         user: res.locals.user,
         profile: {
           id,
-          name,
+          login,
           surname,
           createDate
         }

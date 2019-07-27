@@ -21,4 +21,6 @@ module.exports = {
     entities: ['./server/build/entities/*.js']
   },
   secret: 'jwt-secret',
+  expire_access: '120',
+  expire_refresh: '30d'
 };

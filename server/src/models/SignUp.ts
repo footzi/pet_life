@@ -8,7 +8,7 @@ export default class SignUpModel {
     const user = new User();
 
     const checkUser = await getRepository(User)
-      .findOne({ name: body.name })
+      .findOne({ login: body.login })
       // @ts-ignore
       .then((result: IUser): IUser | null => result || null)
       .catch((error: Error): Error => {
