@@ -1,11 +1,3 @@
-export interface IUser {
-  id: number;
-  login: string;
-  surname: string;
-  createDate: string;
-  password: string;
-}
-
 export interface IPayloadAccessToken {
   login: string;
   password: string;
@@ -17,12 +9,6 @@ export interface IPayloadRefreshToken {
 
 export interface IFormLogin {
   login: string;
-  password: string;
-}
-
-export interface IFormCheckIn {
-  login: string;
-  surname?: string;
   password: string;
 }
 

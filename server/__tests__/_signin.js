@@ -9,7 +9,7 @@ describe('Авторизация', () => {
   it('При успехе получаем 200, id и токены пользователя', async () => {
     const result = await request(app)
       .post('/api/signin')
-      .field('name', mockUser.name)
+      .field('login', mockUser.login)
       .field('password', mockUser.password);
 
     const { user } = result.body;
@@ -20,10 +20,10 @@ describe('Авторизация', () => {
     expect(user).toHaveProperty('refresh_token');
   });
 
-  it('При несуществующем name получаем 403, и сообщение об ошибке', async () => {
+  it('При несуществующем login получаем 403, и сообщение об ошибке', async () => {
     const result = await request(app)
       .post('/api/signin')
-      .field('name', randomstring.generate())
+      .field('login', randomstring.generate())
       .field('password', randomstring.generate());
 
     const { error } = JSON.parse(result.error.text);
@@ -36,7 +36,7 @@ describe('Авторизация', () => {
   it('При неверном пароле получаем 403, и сообщение об ошибке', async () => {
     const result = await request(app)
       .post('/api/signin')
-      .field('name', mockUser.name)
+      .field('login', mockUser.login)
       .field('password', randomstring.generate());
 
     const { error } = JSON.parse(result.error.text);
@@ -49,7 +49,7 @@ describe('Авторизация', () => {
   it('С некорректными данными получаем 403, и сообщение об ошибке', async () => {
     const result = await request(app)
       .post('/api/signin')
-      .field('name', mockUser.name)
+      .field('login', mockUser.login)
       .field('password', []);
 
     const { error } = JSON.parse(result.error.text);

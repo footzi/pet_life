@@ -6,6 +6,7 @@
     "postinstall": "tsc --build & npm run web-build",
     "start": "npm run env-prod & node ./server/build/index.js",
     "web-dev": "npm run env-dev && ts-node-dev --ignore-watch ./web --respawn --transpileOnly  ./server/src/index.ts",
+    "web-test": "npm run env-test && ts-node-dev --ignore-watch ./web --respawn --transpileOnly  ./server/src/index.ts",
     "web-next": "next ./web",
     "web-build": "npm run env-prod & next build ./web",
     "mobile-start": "node node_modules/react-native/local-cli/cli.js start",
@@ -16,6 +17,7 @@
     "lint": "eslint -c .eslintrc --ext .js,.ts ./",
     "lint-fix": "eslint -c .eslintrc --ext .js,.ts ./ --fix",
     "test": "npm run env-test && jest",
+    "test:math": "jest -i -t",
     "jetify": "jetify"
   },
   "dependencies": {

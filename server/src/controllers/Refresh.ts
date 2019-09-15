@@ -8,19 +8,19 @@ import randomstring from 'randomstring';
 const CONFIG = require('../../../server.config.json');
 
 export default class RefreshController {
-  refresh_token: string
-  payload: IPayloadRefreshToken
-  user: IToken
+  refresh_token: string;
+  payload: IPayloadRefreshToken;
+  user: IToken;
   newtokens: {
-    access: string
-    refresh: string
-  }
+    access: string;
+    refresh: string;
+  };
 
   constructor() {
     this.refresh_token = '';
     this.user = { userId: 0, refresh: '' };
-    this.payload = { id:0 };
-    this.newtokens = { access: '', refresh: ''};
+    this.payload = { id: 0 };
+    this.newtokens = { access: '', refresh: '' };
   }
 
   public async refresh(req: Request, res: Response) {
@@ -30,9 +30,7 @@ export default class RefreshController {
       await this.getUser();
       this.compareTokens();
       await this.createTokens();
-
-      const response = { access_token: this.newtokens.access, refresh_token: this.newtokens.refresh};
-      res.send({ user: response });
+      this.send(res);
     } catch (error) {
       const code = error.type === 'not_access' ? 403 : 500;
       res.status(code).send(errorMessage(error.content));
@@ -43,7 +41,7 @@ export default class RefreshController {
     if (header) {
       this.refresh_token = parseBearer(header);
     } else {
-      throw errorTypeMessage('not_access', 'Токен не получен')
+      throw errorTypeMessage('not_access', 'Токен не получен');
     }
   }
 
@@ -51,11 +49,11 @@ export default class RefreshController {
     // @ts-ignore
     jwt.verify(this.refresh_token, SECRET, (error: Error, payload: IPayloadRefreshToken) => {
       if (error) {
-        throw errorTypeMessage('not_access', 'Токен не действителен')
+        throw errorTypeMessage('not_access', 'Токен не действителен');
       }
 
       this.payload = payload;
-    })
+    });
   }
 
   async getUser() {
@@ -66,7 +64,7 @@ export default class RefreshController {
     }
 
     if (!this.user) {
-      throw errorTypeMessage('not_access', 'Для данного пользователя отказано в доступе')
+      throw errorTypeMessage('not_access', 'Для данного пользователя отказано в доступе');
     }
   }
 
@@ -74,17 +72,21 @@ export default class RefreshController {
     const db_token = this.user.refresh;
 
     if (JSON.stringify(db_token) !== JSON.stringify(this.refresh_token)) {
-      throw(errorTypeMessage('not_access', 'Токены не совпадают'));
+      throw errorTypeMessage('not_access', 'Токены не совпадают');
     }
   }
 
   createTokens() {
     const access = { id: this.user.userId };
-    const refresh = { id: this.user.userId, key: randomstring.generate()}
+    const refresh = { id: this.user.userId, key: randomstring.generate() };
     this.newtokens.access = jwt.sign(access, CONFIG.secret, { expiresIn: CONFIG.expire_access });
     this.newtokens.refresh = jwt.sign(refresh, CONFIG.secret, { expiresIn: CONFIG.expire_refresh });
 
     TokenModel.update(this.user.userId, this.newtokens.refresh);
   }
-};
 
+  send(res: Response) {
+    const response = { access_token: this.newtokens.access, refresh_token: this.newtokens.refresh };
+    res.send({ user: response });
+  }
+}

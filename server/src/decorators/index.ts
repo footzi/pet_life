@@ -1,0 +1,1 @@
+export function StaticImplements<T>(t: T) {return t;}

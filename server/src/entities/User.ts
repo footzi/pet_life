@@ -4,7 +4,7 @@ import { Column, PrimaryGeneratedColumn, Entity, CreateDateColumn, UpdateDateCol
 export default class User {
   constructor() {
     this.id = 0;
-    this.login = '';
+    this.name = '';
     this.surname = '';
     this.password = '';
     this.createDate = '';
@@ -15,7 +15,7 @@ export default class User {
     id: number;
 
     @Column()
-    login: string;
+    name: string;
 
     @Column()
     surname: string;

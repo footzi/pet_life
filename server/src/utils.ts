@@ -12,6 +12,10 @@ export const errorMessage = (err: Error): IErrorMessage => {
 
 // Возвращает объект с типом ошибки и экземляром Error;
 export const errorTypeMessage = (type: string, error: string | Error): IErrorTypeMessage => {
+  console.log(error);
+  if (error.content && error.type) {
+    return error;
+  }
   const content = typeof error === 'object' ? error : new Error(error);
 
   return {

@@ -10,22 +10,22 @@ const CONFIG = require('../../../server.config.json');
 
 export default class SignInController {
   body: {
-    login: string
-    password: string
-  }
+    login: string;
+    password: string;
+  };
   user: {
-    id: number
-    password: string
-  }
+    id: number;
+    password: string;
+  };
   tokens: {
-    access: string
-    refresh: string
-  }
+    access: string;
+    refresh: string;
+  };
 
   constructor() {
     this.body = { login: '', password: '' };
     this.user = { id: 0, password: '' };
-    this.tokens = { access: '', refresh:'' };
+    this.tokens = { access: '', refresh: '' };
   }
 
   public async signIn(req: Request, res: Response) {
@@ -33,51 +33,61 @@ export default class SignInController {
 
     try {
       this.checkValue();
-      await this.getUser()
-    } catch(error) {
+      await this.getUser();   
+      this.checkPassword();
+      this.createTokens();
+      this.send(res);
+    } catch (error) {
       const code = error.type === 'not_access' ? 403 : 500;
       res.status(code).send(errorMessage(error.content));
     }
   }
 
-  checkValue() {
+  private checkValue() {
     const { login, password } = this.body;
+    const isValidLogin = checkTypeValue(login, 'string');
+    const isValidPassword = checkTypeValue(password, 'string');
 
-    if (!checkTypeValue(login, 'string') || !checkTypeValue(password, 'string')) {
-      throw errorTypeMessage('not_access', 'Oт клиента получены неверные данные')
+    if (!isValidLogin || !isValidPassword) {
+      throw errorTypeMessage('not_access', 'Oт клиента получены неверные данные');
     }
   }
 
-  async getUser() {
+  private async getUser() {
     try {
       const user = await SignInModel.signIn(this.body.login);
-
-      if (!user) {
-        throw errorTypeMessage('not_access', 'Данного пользователя не существует');  
-      }
-
-      this.user.id = user.id;
-      this.user.password = user.password;
+      
+      this.user.id = user ? user.id : 0;
+      this.user.password = user ? user.password : '';
     } catch (error) {
       throw errorTypeMessage('critical', error);
     }
-  }
 
-  checkPassword() {
-    const checkPassword = bcrypt.compareSync(this.body.password, this.user.password);
-
-    if (!checkPassword) {
-      throw errorTypeMessage('not_access', 'Неверный пароль')
+    if (!this.user.id && !this.user.password) {
+      throw errorTypeMessage('not_access', 'Данного пользователя не существует');
     }
   }
 
-  createTokens() {
+  private checkPassword() {
+    const checkPassword = bcrypt.compareSync(this.body.password, this.user.password);
+
+    if (!checkPassword) {
+      throw errorTypeMessage('not_access', 'Неверный пароль');
+    }
+  }
+
+  private createTokens() {
     const access = { id: this.user.id };
-    const refresh = { id: this.user.id, key: randomstring.generate()}
+    const refresh = { id: this.user.id, key: randomstring.generate() };
     this.tokens.access = jwt.sign(access, CONFIG.secret, { expiresIn: CONFIG.expire_access });
     this.tokens.refresh = jwt.sign(refresh, CONFIG.secret, { expiresIn: CONFIG.expire_refresh });
 
-    TokenModel.save({ userId: this.user.id, refresh: this.tokens.refresh});
+    TokenModel.save({ userId: this.user.id, refresh: this.tokens.refresh });
+  }
+
+  private send(res: Response) {
+    const response = { id: this.user.id, access_token: this.tokens.access, refresh_token: this.tokens.refresh };
+    res.send({ user: response });
   }
   // // Стратегия на проверку существование пользователя и правильность пароля
   // private static localStrategy(): void {
